@@ -1,0 +1,104 @@
+{% extends 'django_app/base.html' %}
+{% load static %}
+{% block contents %}
+
+<link rel="stylesheet" href="{% static 'django_app/css/color.css' %}">
+<link rel="icon" href="{% static 'django_app/img/logo/gjac_favicon.ico' %}">
+<script src="{% static 'django_app/js/tool/button.js' %}"></script>
+
+    <div class="workMain">
+      <div class="titleMargin">
+      <div class="workMain_2">
+        <div class="flex_row">
+          <div><img src="{% static 'django_app/img/menu/arrow.svg' %}"></div>
+          <div class="labellingWork">검수 작업(3차)</div>
+        </div>
+        <!-- <div class="tabs">
+          <div class="btn-box">
+            <button type="button">1차 검수</button>
+            <button type="button">2차 검수</button>
+          </div>
+        </div> -->
+        <div class="tab-list">
+          <div class="tableOver_1 inspect-tab">
+            <table class="worktable">
+                <thead>
+                    <tr>
+                      <th>구분</th>
+                      <th>작업 종류</th>
+                      <th>작업 상태</th>
+                      <th hidden>작업 금액</th>
+                        <th>검수 신청</th>
+                    </tr>
+                </thead>
+
+                <tbody id="processForm">
+                  {% for num,task_num  in inspect_list %}
+                  <tr>
+                      <td>{{task_num.work_id}}</td>
+                      <td>{{task_num.work_type_nm}}</td>
+                      <td>{{task_num.work_status_nm}}</td>
+                      <td>
+                            <form action="{% url 'inspect_process_3rd' task_num.work_id  task_num.work_type %}" method="post">
+                          {% csrf_token %}
+                          <button type="button" class="choice loading-middle" onclick="formMessage(event)">검수 신청</button>
+                            </form>
+                      </td>
+                      {% empty %}
+                      <tr>
+                        <td colspan="4">
+                          작업 목록이 없습니다.
+                        </td>
+                      </tr>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+          </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    <!-- <script>
+      (function(){
+
+        const tabs = document.querySelector('.tabs')
+
+        function tabInit(){
+          const buttonList = tabs.querySelectorAll('button')
+          const tabList = document.querySelectorAll('.tab-list > div')
+
+          tabList[0].classList.add('active')
+          buttonList[0].classList.add('active')
+        }
+
+        tabInit()
+
+        tabs.addEventListener('click', e => {
+          const button = e.target.closest('button')
+          if(!button) return
+
+          openTab(button)
+        })
+
+        function openTab(target){
+          const buttonList = tabs.querySelectorAll('button')
+          let array = [...buttonList]
+          let num = array.findIndex(el => el == target)
+
+          const tabList = document.querySelectorAll('.tab-list > div')
+
+          for(let i = 0; i < tabList.length; i++) {
+            tabList[i].classList.remove('active')
+            buttonList[i].classList.remove('active')
+          }
+
+          tabList[num].classList.add('active')
+          buttonList[num].classList.add('active')
+        }
+
+      })()
+    </script> -->
+
+{% endblock %}
+<script src="{% static 'django_app/js/tool/button.js' %}"></script>

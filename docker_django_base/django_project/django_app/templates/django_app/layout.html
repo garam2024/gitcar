@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>layout</title>
+  <!-- Our Custom CSS -->
+  
+</head>
+<body class="body-portal">
+  <div id="main-container">
+    <header id="header">
+      <a class="navbar-brand" href="layout.html"><img alt="AI cloud"
+          src="{% static 'django_app/img/logo/gjac_logo.png' %}"></a>
+    </header>
+    <!-- workTitle -->
+    <span id="workTitle" class="middle">
+      <div>상품인지 데이터 라벨링 작업</div>
+    </span>
+    <div class="main-menu">
+    <ul class="main-menu-ul">
+      <li>
+        <a href="index_label.html"><img class="menuImg2" alt="labelling" src="{% static 'django_app/img/menu/padlock (1).svg' %}">로그인</a>
+      </li>
+      <li><img class="menuImg" alt="labelling" src="{% static 'django_app/img/menu/bounding-box.svg' %}">
+        <a href="index_label.html">라벨링 하기</a>
+      </li>
+      <li class="current"><img alt="check" class="menuImg" src="{% static 'django_app/img/menu/checked.svg' %}">
+        <a href="index_check.html">검수하기</a>
+      </li>
+      <li><img alt="guide" class="menuImg" src="{% static 'django_app/img/menu/guide.svg' %}">
+        <a href="index_guide.html">가이드라인</a>
+      </li>
+      <li>
+        <img class="menuImg" alt="mypage" src="{% static 'django_app/img/menu/goal.svg' %}">
+        <a href="index_mypage.html">작업 내역</a>
+      </li>
+    </ul>
+  </div>
+    <span id="workMain">
+      <div>workmain</div>
+    </span>
+  </div>
+ 
+</body>
+</html>
+

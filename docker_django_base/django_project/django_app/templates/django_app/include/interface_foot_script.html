@@ -1,0 +1,43 @@
+<!--
+    2021 10 21 상민 수정
+-->
+{% load static %}
+    <footer class="container-fluid footer clear">
+          <div class="footer_container">
+              <div>
+                  <a href="{% url  'main'%}">
+                      <img alt="AI cloud" src="{% static 'django_app/img/logo/gjac_logo.png' %}">
+                  </a>
+              </div>
+              <div>
+                  <p>광주인공지능센터</p>
+                  <p>주소: 광주 동구 동계천로 150 / 문화전당역4번 출구에서 683m</p>
+                  <p><span class="glyphicon glyphicon-earphone"></span> 062-223-1335</p>
+              </div>
+          </div>
+    </footer>
+    <script>
+
+    $.ajaxSetup({
+        headers: {
+            "X-CSRFToken": "{{csrf_token}}"
+        }
+    })
+
+    var inputRegion = "{{task_region|safe}}"
+
+    </script>
+    <script src="{%static 'django_app/car_interface/js/util.js' %}?ver={% now "M-H-i"%}"></script>
+    <script src="{%static 'django_app/car_interface/js/loadXml.js' %}?ver={% now "M-H-i"%}"></script>
+    <script src="{%static 'django_app/car_interface/js/ctrlCanvas.js' %}?ver={% now "M-H-i"%}"></script>
+    <script src="{%static 'django_app/car_interface/js/ctrlWavesurfer.js' %}?ver={% now "M-H-i"%}"></script>
+    <script src="{%static 'django_app/car_interface/js/ctrlSetBtn.js' %}?ver={% now "M-H-i"%}"></script>
+    <script src="{%static 'django_app/car_interface/js/ctrlLabelForm.js' %}?ver={% now "M-H-i"%}"></script>
+    <script src="{%static 'django_app/car_interface/js/ctrlClip.js' %}?ver={% now "M-H-i"%}"></script>
+    <script src="{%static 'django_app/car_interface/js/ctrlFrame.js' %}?ver={% now "M-H-i"%}"></script>
+    <script src="{%static 'django_app/car_interface/js/ctrlHandpose.js' %}?ver={% now "M-H-i"%}"></script>
+    <script src="{%static 'django_app/car_interface/js/resetInfo.js' %}?ver={% now "M-H-i"%}"></script>
+    <script src="{%static 'django_app/car_interface/js/exportJson.js' %}?ver={% now "M-H-i"%}"></script>
+    <script src="{%static 'django_app/car_interface/js/scWavesurfer.js' %}?ver={% now "M-H-i"%}"></script>
+    <script src="{%static 'django_app/car_interface/js/bringNotice.js' %}?ver={% now "M-H-i"%}"></script>
+</body>

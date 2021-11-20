@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document[{{serverNameTitle}}]</title>
+       <!-- Latest compiled and minified CSS -->
+       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+       <!-- jQuery library -->
+       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+       <!-- Latest compiled JavaScript -->
+       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+       <!-- lodash -->
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+
+       <link rel="shortcut icon" href="{%static 'django_app/img/logo/gjac_favicon.ico' %}">
+       <link rel="stylesheet" href="{%static 'django_app/css/commons.css' %}">
+       <link rel="stylesheet" href="{%static 'django_app/css/admin_index.css' %}">
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <!-- Sheet JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
+        <!--FileSaver savaAs 이용 -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
+</head>
+
+<body>
+
+  {% for message in messages %}
+
+
+  <div id="adminAlert" style="display:none;">{{ message }}</div>
+
+{% endfor %}
+
+    <header class="header">
+        <h1 class="logo">
+            <a href="{% url 'main' %}"><img src="{% static 'django_app/img/logo/gjac_logo.png' %}" alt="로고"></a>
+        </h1>
+
+         <nav class="side-nav">
+             <ul>
+                 <li>
+                    <a href="{% url 'admin_board_list' %}" class="button"><b>공지사항</b></a>
+                 </li>
+                <li>
+                    <button type="button" class="button" onclick="location.href='/admin/index'"><b>작업 현황</b></button>
+                </li>
+                 <li>
+                    <button type="button" class="button" onclick="location.href='/admin/userAuth'"><b>유저 권한 관리</b></button>
+                 </li>
+                 <li>
+                    <button type="button" class="button" onclick="location.href='/admin/standard'"><b>검수대기 기준</b></button>
+                 </li>
+<!--                 <li>
+                    <button type="button" class="button" onclick="location.href='/admin/man'">가공/검수</button>
+                 </li>-->
+                 <li>
+                    <a onclick="insert_work()" class="button"><b>작업 등록</b></a>
+                 </li>
+             </ul>
+        </nav>
+
+        <div class="top-menu">
+            <ul>
+                 <li class="user-name">
+                     <button type="button">
+                         {% if user.account_id %}
+                            {{ user.account_id }}
+                         {% else %}
+                            {{ user }}
+                         {% endif %}
+                         님
+                     </button>
+                 </li>
+                 <li>
+                     <form method="post" action="{% url 'logout_module' %}">
+                        <input id="alertLogout" type="submit" value="로그아웃" class="button">
+                    </form>
+                 </li>
+            </ul>
+        </div>
+    </header>
+
+    {% block contents %}
+    {% endblock %}
+
+    <footer class="container-fluid footer">
+        <div>
+            <p>광주인공지능센터</p>
+            <p>주소: 광주 동구 동계천로 150 / 문화전당역4번 출구에서 683m</p>
+            <p><span class="glyphicon glyphicon-earphone"></span> 062-223-1335</p>
+        </div>
+    </footer>
+     <div class="modal-background">
+        <div class="modal-inner">
+            <h4>반려 사유를 작성해 주세요.</h4>
+            <textarea></textarea>
+            <div class="button-form">
+                <button type="button" id="fix-submit">확인</button>
+                <button type="button" id="fix-cancel">취소</button>
+            </div>
+        </div>
+    </div>
+    <form style="display:none" id="admin_view" name="admin_view" method="post">
+                 {% csrf_token %}
+        <input name="worker_id" value="">
+        <input name="work_id" value="">
+        <input name="work_type" value="">
+        <input name="work_status" value="">
+    </form>
+<script>
+
+
+        const modal = document.querySelector('.modal-background')
+        const modal_teatArea = modal.querySelector('textarea')
+        let formEl
+        let textAreaEl
+        let textData
+
+        function fix(e){
+            modal.classList.add('active')
+            modal_teatArea.value = ''
+            modal_teatArea.focus()
+
+            formEl = undefined
+            textAreaEl = undefined
+            textData = ''
+
+            formEl = e.currentTarget.parentNode
+            textAreaEl = formEl.querySelector('textarea')
+        }
+
+        const fixSubmit = document.querySelector('#fix-submit')
+        const fixCancel = document.querySelector('#fix-cancel')
+
+        fixSubmit.addEventListener('click', e => {
+            if(textAreaEl){
+                textAreaEl.value = modal_teatArea.value
+            }
+            modal.classList.remove('active')
+
+            formEl.submit()
+        })
+
+        fixCancel.addEventListener('click', e => {
+            formEl = undefined
+            textAreaEl = undefined
+            textData = ''
+
+            modal.classList.remove('active')
+        })
+
+    </script>
+    <script>
+        $.ajaxSetup({
+            headers: { "X-CSRFToken": '{{csrf_token}}' }
+        });
+    </script>
+    <script src="{%static 'django_app/js/tool/admin_index.js' %}"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+
+      let adminAlert = document.getElementById("adminAlert");
+      var adminMessage = adminAlert? adminAlert.innerHTML : null;
+
+    if(adminMessage){
+      $().ready(function () {
+        Swal.fire({
+          icon: 'success', // Alert 타입
+          title: adminMessage, // Alert 제목
+
+        })
+     })
+    }
+
+    </script>
+    <script>
+        function insert_work(){
+            const confirmed = confirm("작업등록을 하시겠습니까?");
+            if(!confirmed) return
+            //스크립트 방식으로 url요청을 보내는 방법
+            window.location.assign('insert_work');
+        }
+    </script>
+</body>
+</html>
+
+
+
+

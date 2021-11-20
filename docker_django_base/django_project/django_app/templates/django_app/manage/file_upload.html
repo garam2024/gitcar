@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>업로드 파일</title>
+     <!-- Latest compiled and minified CSS -->
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+     <!-- jQuery library -->
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+     <!-- Latest compiled JavaScript -->
+     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+     <!-- lodash -->
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+     <link rel="shortcut icon" href="{%static 'django_app/img/logo/gjac_favicon.ico' %}">
+     <link rel="stylesheet" href="{%static 'django_app/css/commons.css' %}">
+</head>
+<body>
+    <header class="header ">
+        <h1 class="logo"><a href="index.html"><img src="{%static 'django_app/img/logo/gjac_logo.png' %}" alt="로고"></a></h1>
+    </header>
+    <main class="container">
+        <h2>파일 업로드</h2>
+        <input type="file" id="fileUpload" multiple="multiple">
+    </main>
+    <footer class="container-fluid footer">
+        <p>광주인공지능센터</p>
+        <p>주소: 광주 동구 동계천로 150 / 문화전당역4번 출구에서 683m</p>
+        <p><span class="glyphicon glyphicon-earphone"></span> 062-223-1335</p>
+    </footer>
+    <script>
+        const fileUpload = (function(){
+            const input = document.querySelector('#fileUpload')
+
+            input.addEventListener('change', e => {
+                onFileUpload(e)
+            })
+
+            function onFileUpload(e){
+                let { files } = e.target
+                console.log(files)
+
+                for(let i = 0; i < files.length; i++){
+                    if(files[i].type !== 'video/mp4'){
+                        return alert('동영상 파일이 아닙니다.')
+                    }
+                } 
+            }
+    //if (file) {
+    //    var mbSize = file.size / 1024 / 1024;
+    //    var fileIsMp4 = (file.type === "video/mp4");
+
+    //    if (mbSize > 1 || !fileIsMp4) {
+    //        alert("failure");
+    //    } else {
+    //        alert("success");
+    //    }
+    // }
+
+        })()
+    </script>
+</body>
+</html>

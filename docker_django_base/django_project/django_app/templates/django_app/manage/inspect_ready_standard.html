@@ -1,0 +1,253 @@
+{% extends 'django_app/manage/admin_base.html' %}
+{% load static %}
+
+{% block contents %}
+
+       <!-- Latest compiled and minified CSS -->
+       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+       <!-- jQuery library -->
+       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+       <!-- Latest compiled JavaScript -->
+       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+       <!-- lodash -->
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+      
+       
+       <link rel="shortcut icon" href="{%static 'django_app/img/logo/gjac_favicon.ico' %}">
+       <link rel="stylesheet" href="{%static 'django_app/css/commons.css' %}">
+       <link rel="stylesheet" href="{%static 'django_app/css/admin_index.css' %}">
+
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script>
+            $(function() {
+                $("#datepicker1,#datepicker2").datepicker({
+                     dateFormat: 'yy-mm-dd'
+                });
+            });
+        </script>
+
+<body>
+
+  {% for message in messages %}
+
+
+  <div id="adminAlert" style="display:none;">{{ message }}</div>
+
+{% endfor %}
+
+    <main class="admin-page">
+
+        <section>
+            <h3>검수대기 기준</h3>
+
+            <h3>가공</h3>
+            <div class="admin-table">
+                <table class="table table-striped table-hover" id="table-tab-01">
+                    <tr>
+                        <th>데이터 가공</th>
+                        <th>작업분류</th>
+                        <th>작업건수(분배)</th>
+                        <th>현재 작업량</th>
+                        <th>진척도</th>
+                    </tr>
+
+                    {% for task in standard_list_c %}
+                    <tr>
+                    <td>{{task.group_name}}</td>
+                    <td>{{task.work_name}}</td>
+                    <td>{{task.work_div_cnt}}</td>
+                    <td>{{task.work_cnt}}</td>
+                    <td>{{task.ratio}}</td>
+
+                  </tr>
+                  {% endfor %}
+
+                </table>
+            </div>
+
+            <h3>검수</h3>
+            <div class="admin-table">
+                <table class="table table-striped table-hover" id="table-tab-02">
+                    <tr>
+                        <th>데이터 가공</th>
+                        <th>작업분류</th>
+                        <th>작업건수(분배)</th>
+                        <th>현재 작업량</th>
+                        <th>진척도</th>
+                    </tr>
+
+                     {% for task in standard_list_e %}
+                    <tr>
+                    <td>{{task.group_name}}</td>
+                    <td>{{task.work_name}}</td>
+                    <td>{{task.work_div_cnt}}</td>
+                    <td>{{task.work_cnt}}</td>
+                    <td>{{task.ratio}}</td>
+                    </tr>
+                  {% endfor %}
+
+                </table>
+            </div>
+
+            <div class="tab">
+
+
+                <h3>test</h3>
+                <div class="tab-table">
+                    <div class="admin-table">
+                        <form action = "{% url 'admin_index' %}" method="POST" name="searchForm">
+                        {% csrf_token %}
+                        <div class="searchCondition" name="searchCondition">
+                            <div class="search">
+                                <div class="condition">
+
+                                    <input id="workerNm" class="form-control" name="workerNm" type="text" placeholder="작업자명"  autocomplete='off'>
+                                </div>
+
+
+                                <div class="condition">
+<!--                                    <div>등록 기간 :</div>-->
+                                    <div class="date">
+                                        <input type="text" id="datepicker1"  class="form-control" name="searchBgn" placeholder="조회시작날짜"  autocomplete='off'>
+                                        <input type="text" id="datepicker2" class="form-control" name="searchEnd" placeholder="조회마감날짜"  autocomplete='off'>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="searchSubmit">
+                                <button type="submit" class="btn btn-primary btn-lg">검색</button>
+<!--                                <button type="button" class="btn btn-primary btn-lg">초기화</button>-->
+                            </div>
+
+                        </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+    {% endblock %}
+    <script>
+
+        const modal = document.querySelector('.modal-background')
+        const modal_teatArea = modal.querySelector('textarea')
+        let formEl
+        let textAreaEl
+        let textData
+
+        function fix(e){
+            modal.classList.add('active')
+            modal_teatArea.value = ''
+            modal_teatArea.focus()
+
+            formEl = undefined
+            textAreaEl = undefined
+            textData = ''
+
+            formEl = e.currentTarget.parentNode
+            textAreaEl = formEl.querySelector('textarea')
+        }
+
+        const fixSubmit = document.querySelector('#fix-submit')
+        const fixCancel = document.querySelector('#fix-cancel')
+
+        fixSubmit.addEventListener('click', e => {
+            if(textAreaEl){
+                textAreaEl.value = modal_teatArea.value
+            }
+            modal.classList.remove('active')
+
+            formEl.submit()
+        })
+
+        fixCancel.addEventListener('click', e => {
+            formEl = undefined
+            textAreaEl = undefined
+            textData = ''
+
+            modal.classList.remove('active')
+        })
+
+    </script>
+    <script>
+        $.ajaxSetup({
+            headers: { "X-CSRFToken": '{{csrf_token}}' }
+        });
+    </script>
+    <script src="{%static 'django_app/js/tool/admin_index.js' %}"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+
+      let adminAlert = document.getElementById("adminAlert");
+      var adminMessage = adminAlert? adminAlert.innerHTML : null;
+
+    if(adminMessage){
+      $().ready(function () {
+        Swal.fire({
+          icon: 'success', // Alert 타입
+          title: adminMessage, // Alert 제목
+
+        })
+     })
+    }
+
+    </script>
+
+     <script>
+
+
+     let workViewTable = document.querySelector(".workViewTable");
+
+
+     workViewTable.addEventListener('click', function(e){
+
+        workId = e.target.parentNode.parentNode.children[6].value
+        workType = e.target.parentNode.parentNode.children[7].value
+        workStatus = e.target.parentNode.parentNode.children[8].value
+
+
+
+        console.log(workId,workType, workStatus)
+        if (e.target.dataset.work =="admin_work_view"){
+        //var pop= window.open("",'작업확인',"")
+
+        var admin = document.forms.admin_view
+        admin.action = '/admin/index/adminview'
+        admin.target = "_new"
+        admin.work_id.value = workId
+        admin.work_type.value = workType
+        admin.work_status.value = workStatus
+
+        admin.submit()
+
+
+}
+
+
+
+
+
+
+
+
+
+     })
+
+
+
+
+
+
+    </script>
+
+
+
+</body>
+
+
+
+

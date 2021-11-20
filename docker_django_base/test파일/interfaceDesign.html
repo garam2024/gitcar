@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Expires" content="Mon, 06 Jan 1990 00:00:01 GMT">
+        
+        <!-- favicon -->
+        <link rel="shortcut icon" href="#">
+        
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"> <!-- CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet"> <!-- 자바스크립트 -->
+
+        <!-- stylesheet -->
+        <link rel="stylesheet" href="css/style.css" />
+        <!-- <link rel="stylesheet"  href="{%static 'django_app/car_interface/css/style2.css' %}" /> -->
+        <link rel="stylesheet" href="css/ribbon.css" />
+
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+
+    </head>
+<body>
+    <div id="demo">
+        <div class="video-form" width="800px">
+
+            <video id="orgVideo" src="" type="video/mpeg" width="800px" height="450px" poster="img/no_image.png" ></video>
+            <img id="tmpImage" width="800px" height="450px">
+
+            <canvas id="canvas" width="800px" height="450px"
+                style="display:block; position: absolute; z-index:-1"></canvas>
+            <canvas id="c" width="800px" height="450px" style="position: absolute; z-index: 20;"></canvas>
+
+            <p id="subtitle" class="text-center text-info">&nbsp;</p>
+
+            <div id="wave-timeline"></div>
+
+            <div id="waveform">
+
+            </div>
+
+            <div class="tool_video">
+                <div>
+                    <button class="btn btn-default btn-block" title="download file" id="fileDownload">
+                        <i class="glyphicon glyphicon-film"></i>&nbsp;
+                        <span>Video 받기</span>
+                    </button>
+                </div>
+                <div>
+                    <button class="btn btn-default btn-block" title="download xml" id="xmlDownload">
+                        <i class="glyphicon glyphicon-copy"></i>&nbsp;
+                        <span>XML Region 받기</span>
+                    </button>
+                </div>
+                <div>
+                    <button class="btn btn-default btn-block" title="load file" id="fileLoad">
+                        <i class="glyphicon glyphicon-film"></i>&nbsp;
+                        <span>Video 선택</span>
+                    </button>
+                </div>
+                <div>
+                    <!-- <button class="btn btn-default btn-block" title="load xml" id="xmlLoad" disabled> -->
+                    <button class="btn btn-default btn-block" title="load xml" id="xmlLoad">
+                        <i class="glyphicon glyphicon-copy"></i>&nbsp;
+                        <span>XML Region 선택</span>
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="video-nav">
+
+            <div class="sets-container">
+                <h2>클립5개 묶음</h2>
+                <div id='div_btn'></div>
+            </div>
+            <div class="clips-container">
+                <h2>클립 영역</h2>
+                <div id="clips"></div>
+            </div>
+
+            <div class="frames-container">
+                <h2>프레임 영역</h2>
+                <div id="frames"></div>
+            </div>
+
+            <div class="work_board">
+                <div class="tool">
+                    <div>
+                        <button class="btn btn-primary btn-block" data-action="play">
+                            <span id="play">
+                                <i class="glyphicon glyphicon-play"></i>&nbsp;
+                                재생 (B)
+                            </span>
+
+                            <span id="pause" style="display: none">
+                                <i class="glyphicon glyphicon-pause"></i>&nbsp;
+                                일시정지 (B)
+                            </span>
+                        </button>
+                    </div>
+
+                    <div>
+                        <button id="modelLoad" class="btn btn-warning btn-block" ondblclick="modelLoad()">
+                            <i class="glyphicon glyphicon-screenshot"></i>&nbsp;
+                            HandPose 모델 (재)호출
+                        </button>
+                    </div>
+                    <div>
+                        <button id="modelReload" class="btn btn-info btn-block" ondblclick="modelReload()">
+                            <i class="glyphicon glyphicon-refresh"></i>&nbsp;
+                            이전작업 호출
+                        </button>
+                    </div>
+
+                </div>
+
+                <form role="form" name="edit" id="selectForm" style="transition: opacity 300ms linear;">
+                    <div class="form-group">
+                        <div class="input-begin-end" style="display:none">
+                            <div>
+                                <label for="start">시작</label>
+                                <input class="form-control" id="start" name="start" />
+                            </div>
+                            <div>
+                                <label for="end">끝</label>
+                                <input class="form-control" id="end" name="end" />
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="note">손모양 라벨링</label>
+                            <select name="handpose" id="handpose" class="form-control" disabled>
+                                <option disabled selected value></option>
+                                <option value="손바닥 보이기">1. 손바닥 보이기</option>
+                                <option value="소지 펴기">2. 소지 펴기</option>
+                                <option value="주먹 바닥 보이기">3. 주먹 바닥 보이기</option>
+                                <option value="엄지 왼쪽">4. 엄지 왼쪽</option>
+                                <option value="엄지 오른쪽">5. 엄지 오른쪽</option>
+                                <option value="검지 흔들기">6. 검지 흔들기</option>
+                                <option value="엄지 위">7. 엄지 위</option>
+                                <option value="엄지 아래">8. 엄지 아래</option>
+                                <option value="피스 포즈">9. 피스 포즈</option>
+                                <option value="검지 중지 펴기">10. 검지 중지 펴기</option>
+                                <option value="손바닥 좁혔다펴기">11. 손바닥 좁혔다펴기</option>
+                                <option value="손바닥 좁히기">12. 손바닥 좁히기</option>
+                                <option value="엄지 소지 펴기(전화해 손모양)">13. 엄지 소지 펴기(전화해 손모양)</option>
+                                <option value="반짝반짝 흔들기">14. 반짝반짝 흔들기</option>
+                                <option value="엄지 검지 펴기">15. 엄지 검지 펴기</option>
+                                <option value="검지 손바닥 보이기">16. 검지 손바닥 보이기</option>
+                                <option value="손등 보이기">17. 손등 보이기</option>
+                                <option value="검지 손등 보이기">18. 검지 손등 보이기</option>
+                                <option value="오케이">19. 오케이</option>
+                            </select>
+                            <input name="attributes" id="attributes" type="hidden" value="" />
+                        </div>
+                        <div>
+                            <label for="note">구간 전사</label>
+                            <select name="note" id="note" class="form-control" disabled>
+                              <!-- <textarea name="note"  id="note" class="form-control"></textarea> -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group fr-4">
+                        <div class="button-submit-delete">
+                            <button type="submit" id="clibSave" class="btn btn-primary btn-save">
+                                <i class="glyphicon glyphicon-ok"></i>&nbsp;
+                                <span>클립 저장(S)</span>
+                            </button>
+                        </div>
+                        <div class="button-submit-delete">
+                            <button type="button" id="clibDelete" class="btn btn-danger btn-block" onclick="deleteRegion()">
+                                <i class="glyphicon glyphicon-remove"></i>&nbsp;
+                                <span>클립 삭제(D)</span>
+                            </button>
+                        </div>
+
+                          <button  id="final_complete" type="button" class="btn btn-success btn-block">
+                              <i class="glyphicon glyphicon-check"></i>&nbsp;
+                              <span>최종 제출</span>
+                          </button>
+                      </div>
+                </form>
+
+                <div class="BeforeRejection">
+                    <div class="before_retask-rejection">
+                        <label for="BeforeMarkRejection">이전 반려 사유</label>
+                        <textarea readonly id="BeforeMarkRejection" class="form-control">{{history_info.memo}}</textarea>
+                    </div>
+                </div>
+
+            </div>
+
+            <form name="returned">
+                <div class="returned-work">
+                    <label for="returnedWork">반려 사유</label>
+                    <select name="rejection" class="form-control" id="returnedWork">
+                        <option value='반려 사유 없음'>반려 사유 없음</option>
+                        <option value='제스처 오태깅 : 명확한 동작에서 다른 항목으로 라벨링'>제스처 오태깅 : 명확한 동작에서 다른 항목으로 라벨링</option>
+                        <option value='제스처 과태깅 : 손동작이 바뀌는 프레임을 라벨링'>제스처 과태깅 : 손동작이 바뀌는 프레임을 라벨링</option>
+                        <option value='제스처 미태깅 : 손동작이 명확히 표시되지만 라벨링 하지 않음'>제스처 미태깅 : 손동작이 명확히 표시되지만 라벨링 하지 않음</option>
+                        <option value='음성전사 오태깅 :행동과 일치하여 명확하게 들리지만 타 항목으로 라벨링 (ex :시작 -> 시작해줘)'>음성전사 오태깅 :행동과 일치하여 명확하게 들리지만 타 항목으로 라벨링 (ex :시작 -> 시작해줘)</option>
+                        <option value='음성전사 과태깅 : 93종에 해당하지 않는 다른 항목으로 입력 (ex :스타트, 홀드 등)'>음성전사 과태깅 : 93종에 해당하지 않는 다른 항목으로 입력 (ex :스타트, 홀드 등)</option>
+                        <option value='음성전사 미태깅 : 음성 전사를 하지 않음'>음성전사 미태깅 : 음성 전사를 하지 않음</option>
+                    </select>
+                    <button type="button" class="btn btn-primary" id="addRejection">
+                        적용
+                    </button>
+                    <button type="button" class="btn btn-danger" id="removeRejection">
+                        해제
+                    </button>
+                </div>
+                <div class="middle">
+                    <textarea class="form-control"></textarea>
+                </div>
+                <div class="right-btn">
+                    <button type="button" class="btn btn-success" id="inspectSuccess">
+                        <i class="glyphicon glyphicon-log-in"></i>&nbsp; 검사 완료
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    <footer class="container-fluid footer clear">
+        <div class="footer_container">
+            <div>
+                <a href="{% url  'main'%}">
+                    <img alt="AI cloud" src="img/gjac_logo.png">
+                </a>
+            </div>
+            <div>
+                <p>광주인공지능센터</p>
+                <p>주소: 광주 동구 동계천로 150 / 문화전당역4번 출구에서 683m</p>
+                <p><span class="glyphicon glyphicon-earphone"></span> 062-223-1335</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

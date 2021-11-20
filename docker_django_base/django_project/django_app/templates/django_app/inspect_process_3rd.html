@@ -1,0 +1,923 @@
+<!--<!DOCTYPE html>-->
+<!--{% load static %}-->
+<!--<html>-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta http-equiv="X-UA-Compatible" content="IE=edge">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    &lt;!&ndash; Latest compiled and minified CSS &ndash;&gt;-->
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">-->
+<!--    &lt;!&ndash; jQuery library &ndash;&gt;-->
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
+<!--    &lt;!&ndash; Latest compiled JavaScript &ndash;&gt;-->
+<!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>-->
+<!--    <link rel="shortcut icon" href="{%static 'django_app/img/logo/gjac_favicon.ico' %}">-->
+<!--    <link rel="stylesheet" href="{%static 'django_app/css/commons.css' %}">-->
+<!--   -->
+<!--    <link rel="stylesheet"  href="{%static 'django_app/css/boundingPage.css' %}">-->
+
+<!--<body>-->
+<!--    &lt;!&ndash; <div class="page-loading">-->
+<!--        <div class="message">-->
+<!--            데이터를 전송 중입니다.-->
+<!--        </div>-->
+<!--        <div class="spinner">-->
+<!--            <i class="fas fa-spinner fa-10x"></i>-->
+<!--        </div>-->
+<!--    </div> &ndash;&gt;-->
+<!--    <div class="modal-background">-->
+<!--        <div class="modal-window">-->
+<!--            <div>-->
+<!--                <div class="message">-->
+<!--                    작업을 완료할 경우 재작업을 할 수 없습니다.<br>-->
+<!--                    작업을 완료하시겠습니까?-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div>-->
+<!--                <button data-modal="sure" class="button-check">확인</button>-->
+<!--                <button data-modal="cancel" class="button-normal">취소</button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    &lt;!&ndash; 헤더 & 툴 박스 &ndash;&gt;-->
+<!--    <header class="header">-->
+<!--      <div><a  href="{% url  'main'%}"><img alt="AI cloud"-->
+<!--        src="{% static 'django_app/img/logo/gjac_logo.png' %}"></a></div>-->
+<!--    </header>-->
+<!--    <title>Bounding Page</title>-->
+<!--    <div class="header-space"></div>-->
+<!--    <nav class="labeling-page-nav">-->
+<!--        <aside class="inner">-->
+<!--            <h3>작업 완료 확인</h3>-->
+<!--            <div>-->
+<!--                -->
+<!--            </div>-->
+<!--        </aside>-->
+<!--        <div class="toggle-button">-->
+<!--            <div></div>-->
+<!--            <div></div>-->
+<!--            <div></div>-->
+<!--        </div>-->
+<!--    </nav>-->
+<!--    &lt;!&ndash; 라벨링 작업 &ndash;&gt;-->
+<!--    <main class="container image-labeling-main no-select">-->
+<!--        <div class="flow-element">-->
+<!--            <nav class="image-labeling-toolbox">-->
+<!--                <div class="labeling-toolbox-left">-->
+<!--                    &lt;!&ndash; 파일 추가 &ndash;&gt;-->
+<!--                    <label for="inputImage" class="glyphicon glyphicon-folder-open button-first hidden">-->
+<!--                        <input type="file" id="inputImage" class="hidden">-->
+<!--                    </label>-->
+<!--                    &lt;!&ndash; 제품 선택 &ndash;&gt;-->
+<!--                    <ul class="label-product-box">-->
+<!--                        <li>-->
+<!--                            <div class="product-value">-->
+<!--                                <span class="selected">바나나 우유</span>-->
+<!--                                <span class="down glyphicon glyphicon-chevron-down"></span>-->
+<!--                                <span class="up glyphicon glyphicon-chevron-up"></span>-->
+<!--                            </div>-->
+<!--                            <ul class="product-selected">-->
+<!--                                -->
+<!--                            </ul>-->
+<!--                        </li>-->
+<!--                    </ul>-->
+<!--                    &lt;!&ndash; 라벨 선택 &ndash;&gt;-->
+<!--                    <ul class="label-select-box">-->
+<!--                        <li>-->
+<!--                            <div class="select-value hidden">-->
+<!--                                <span class="selected"></span>-->
+<!--                                &lt;!&ndash; <span class="down glyphicon glyphicon-chevron-down"></span>-->
+<!--                                <span class="up glyphicon glyphicon-chevron-up"></span> &ndash;&gt;-->
+<!--                            </div>-->
+<!--                            <ul class="label-selected">-->
+<!--                                -->
+<!--                            </ul>-->
+<!--                        </li>-->
+<!--                    </ul>-->
+<!--                    &lt;!&ndash; 흐릿한 이미지 체크 &ndash;&gt;-->
+<!--                    <div class="label-blur-check" hidden>-->
+<!--                        <label>흐릿한 이미지: <input type="checkbox" id="blurCheck"></label>-->
+<!--                    </div>-->
+<!--                    &lt;!&ndash; 컬러 선택 &ndash;&gt;-->
+<!--                    <input type="color" value="#E71D36" id="selectColor" hidden>-->
+<!--                </div>-->
+<!--                &lt;!&ndash; 이미지 이전 & 다음 버튼 &ndash;&gt;-->
+<!--                <div class="image-order">-->
+<!--                    <div class="page-input">-->
+<!--                        <input type="text" id="inputPage" placeholder="1">-->
+<!--                    </div>-->
+<!--                    <div class="image-order-left">-->
+<!--                        <button class="glyphicon glyphicon button-first glyphicon-chevron-left" id="imagePrevButton"></button>-->
+<!--                        <button class="glyphicon glyphicon button-first glyphicon-chevron-right" id="imageNextButton"></button>-->
+<!--                    </div>-->
+<!--                    <div class="image-order-right">-->
+<!--                        <span id="nowPage">0</span>-->
+<!--                        <span> / </span>-->
+<!--                        <span id="allPageList">0</span>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </nav>-->
+<!--        </div>-->
+<!--        <div class="row image-labeling-view">-->
+<!--            <div class="image-labeling-form">-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        &lt;!&ndash; 라벨링 기타 &ndash;&gt;-->
+<!--        <div class="row image-labeling-section">-->
+<!--            <div class="col-lg-6">-->
+<!--                <a id="imageToClient" class="button-first">이미지 내보내기</a>-->
+<!--                &lt;!&ndash; 반려 체크 &ndash;&gt;-->
+<!--                <select class="fix-check" name="selectBox">-->
+<!--                    <option value="0" selected>반려 사유(이상 없음)</option>-->
+<!--                    <option value="1">박스를 잘못 그렸습니다.</option>-->
+<!--                    <option value="2">라벨을 잘못 선택했습니다.</option>-->
+<!--                    <option value="3">이유3</option>-->
+<!--                    <option value="4">이유4</option>-->
+<!--                </select>-->
+<!--                &lt;!&ndash; 반려 체크 &ndash;&gt;-->
+<!--            </div>-->
+<!--            <div class="col-lg-6 right">-->
+<!--              <a id="jsonDataToServer_1" href="{% url 'mytask' %}" class="button-first">임시 저장</a>-->
+<!--                <a id="jsonDataToServer" class="button-first">작업 완료</a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </main>-->
+
+<!--    <div id="imageData" class="hidden">-->
+<!--        <input type="hidden">-->
+<!--        {% for task in task_info_list %}-->
+
+<!--        <h3 id="imageId">{{task.task_num}}</h3>-->
+<!--        <h3 id="imagePath">{{task.image_save_path}}</h3>-->
+<!--        <h3 id="imageLength">{{task.image_count}}</h3>-->
+<!--        <h3 id="imageName">{{task.task_num}}</h3>-->
+<!--        -->
+<!--        {% endfor %}-->
+
+<!--        <h3 id="imageUpdate">{{ message_info }}</h3>-->
+<!--    </div>-->
+<!--    -->
+<!--    <div id="exportImageSection" class="hidden">-->
+<!--        -->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; 푸터 &ndash;&gt;-->
+<!--    <footer class="container-fluid footer">-->
+<!--        <div class="container">-->
+<!--            <p>광주인공지능센터</p>-->
+<!--            <p>주소: 광주 동구 동계천로 150 / 문화전당역4번 출구에서 683m</p>-->
+<!--            <p><span class="glyphicon glyphicon-earphone"></span> 062-223-1335</p>-->
+<!--        </div>-->
+<!--    </footer>-->
+<!--    &lt;!&ndash; fabric &ndash;&gt;-->
+<!--    <script>-->
+<!--        $.ajaxSetup({-->
+<!--            headers: { "X-CSRFToken": '{{csrf_token}}' }-->
+<!--        });-->
+<!--    </script>-->
+<!--    <script src=" {% static 'django_app/js/tool/fabric.min.js'%}"></script>-->
+<!--   -->
+<!--    <script src="{% static 'django_app/js/tool/bounding_util.js'%}"></script>-->
+<!--    <script src=" {% static 'django_app/js/tool/labeling.js'%}"></script>-->
+
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
+{% load static %}
+<html>
+{% include 'django_app/include/interface_head.html' %}
+<body itemscope itemtype="http://schema.org/WebApplication">
+    <!-- <div class="page-loading">
+      <div class="message">
+          데이터를 전송 중입니다.
+      </div>
+      <div class="spinner">
+          <i class="fas fa-spinner fa-10x"></i>
+      </div>
+  </div>
+  <div class="modal-background">
+      <div class="modal-window">
+          <div>
+              <div class="message">
+                  작업을 완료할 경우 재작업을 할 수 없습니다.<br>
+                  작업을 완료하시겠습니까?
+              </div>
+          </div>
+          <div>
+              <button data-modal="sure" class="button-check">확인</button>
+              <button data-modal="cancel" class="button-normal">취소</button>
+          </div>
+      </div>
+  </div> -->
+    <!-- 헤더 & 툴 박스 -->
+    <header class="header">
+        <div><a href="{% url  'main'%}"><img alt="AI cloud" src="{% static 'django_app/img/logo/gjac_logo.png' %}"></a>
+        </div>
+    </header>
+    <!-- <title>Bounding Page</title>
+  <div class="header-space"></div>
+  <nav class="labeling-page-nav">
+      <aside class="inner">
+          <h3>작업 완료 확인</h3>
+          <div>
+
+          </div>
+      </aside>
+      <div class="toggle-button">
+          <div></div>
+          <div></div>
+          <div></div>
+      </div>
+  </nav> -->
+
+    <!-- export video -->
+  <input type="hidden" id="exportVideo" value="{{task_info_list.video_path}}">
+    <input type="hidden" id="tasknumber" value="{{task_info_list.work_id}}">
+      <input type="hidden" id="groupId" value="{{task_info_list.group_id}}">
+      <!-- input db region -->
+  <input type="hidden" id="inputRegion" value="{{task_region}}">
+    <!-- input file -->
+    <input id="file" type="file" accept="video/mp4,video/mkv, video/x-m4v,video/*" class="hidden" />
+    <input id="xmlFile" type="file" class="hidden" />
+    <textarea id="content-target" class="hidden"></textarea>
+
+    <!-- loading (css .loader, js eventListener change)-->
+    <div class="loader hide"></div>
+
+    <div id="demo">
+        <div class="video-form" width="800px">
+            <!--
+          <video id="orgVideo" src="" type="video/mpeg" class="active" width="1200px" height="675px"></video>
+          -->
+
+
+           <video id="orgVideo" src="" type="video/mpeg" width="800px" height="450px" ></video>
+
+
+
+            <!-- <video id="orgVideo" src="{% static 'django_app/media/' %}" type="video/mpeg" class="active" width="800px" height="450px"></video>
+           -->
+
+            <img id="tmpImage" style="display: none;" width="800px" height="450px">
+
+            <canvas id="canvas" width="800px" height="450px"
+                style="display:block; position: absolute; z-index:-1"></canvas>
+            <canvas id="c" width="800px" height="450px" style="position: absolute; z-index: 20;"></canvas>
+
+            <p id="subtitle" class="text-center text-info">&nbsp;</p>
+
+            <div id="wave-timeline"></div>
+
+            <div id="waveform">
+                <!-- Here be the waveform -->
+            </div>
+
+            <br/>
+
+            <div class="tool_video">
+                <div>
+                    <label for="note">Video 파일 다운로드</label>
+                    <button class="btn btn-default btn-block" title="download file" id="fileDownload">
+                        <i class="glyphicon glyphicon-film"></i>&nbsp;
+                        <span>Video 받기</span>
+                    </button>
+                </div>
+                <div>
+                    <label for="note">XML Region 정보 다운로드</label>
+                    <!-- <button class="btn btn-default btn-block" title="load xml" id="xmlLoad" disabled> -->
+                    <button class="btn btn-default btn-block" title="download xml" id="xmlDownload">
+                        <i class="glyphicon glyphicon-copy"></i>&nbsp;
+                        <span>XML Region 받기</span>
+                    </button>
+                    <!-- <input type="file" id="input-file">XML 가져오기 -->
+                </div>
+                <div>
+                    <label for="note">Video 파일 업로드</label>
+                    <button class="btn btn-default btn-block" title="load file" id="fileLoad">
+                        <i class="glyphicon glyphicon-film"></i>&nbsp;
+                        <span>Video 선택</span>
+                    </button>
+                </div>
+                <div>
+                    <label for="note">XML Region 정보 업로드</label>
+                    <!-- <button class="btn btn-default btn-block" title="load xml" id="xmlLoad" disabled> -->
+                    <button class="btn btn-default btn-block" title="load xml" id="xmlLoad">
+                        <i class="glyphicon glyphicon-copy"></i>&nbsp;
+                        <span>XML Region 선택</span>
+                    </button>
+                    <!-- <input type="file" id="input-file">XML 가져오기 -->
+                </div>
+
+            </div>
+
+        </div>
+        <div class="video-nav">
+
+            <!-- clip button -->
+            <div class="sets-container">
+                <h2>클립5개 묶음</h2>
+                <div id='div_btn'></div>
+            </div>
+
+
+            <div class="clips-container">
+                <h2>클립 영역</h2>
+                <div id="clips"></div>
+            </div>
+
+
+            <div class="frames-container">
+                <h2>프레임 영역</h2>
+                <div id="frames"></div>
+            </div>
+            <div class="work_board">
+
+                <div class="tool">
+                    <div>
+                        <button class="btn btn-primary btn-block" data-action="play">
+                            <span id="play">
+                                <i class="glyphicon glyphicon-play"></i>&nbsp;
+                                재생 (B)
+                            </span>
+
+                            <span id="pause" style="display: none">
+                                <i class="glyphicon glyphicon-pause"></i>&nbsp;
+                                일시정지 (B)
+                            </span>
+                        </button>
+                    </div>
+
+                    <div>
+                        <button id="modelLoad" class="btn btn-warning btn-block" onclick="modelLoad()">
+                            <i class="glyphicon glyphicon-screenshot"></i>&nbsp;
+                            HandPose 모델 (재)호출
+                        </button>
+                    </div>
+                    <div>
+                        <button id="modelReload" class="btn btn-info btn-block" onclick="modelReload()">
+                            <i class="glyphicon glyphicon-refresh"></i>&nbsp;
+                            이전작업 호출
+                        </button>
+                    </div>
+                    <!-- <div>
+              <button id="button1" class="btn btn-danger btn-block" onclick="removeSkeleton();">
+                  <i class="glyphicon glyphicon-remove-sign"></i>&nbsp;
+                  HandPose 점 삭제
+              </button>
+          </div>
+          <div>
+              <button id="preBtn" class="btn btn-success btn-block" data-action="pre" onclick="clickPreBtn()"
+                  disabled>
+                  <i class="glyphicon glyphicon-chevron-left"></i>
+                  pre
+              </button>
+          </div>
+          <div>
+              <button id="nextBtn" class="btn btn-success btn-block" data-action="next" onclick="clickNextBtn()"
+                  disabled>
+                  <i class="glyphicon glyphicon-chevron-right"></i>
+                  next
+              </button>
+          </div> -->
+                </div>
+                <form role="form" name="edit" id="selectForm" style="transition: opacity 300ms linear;">
+
+                    <div class="form-group">
+                        <div class="input-begin-end" style="display:none">
+                            <div>
+                                <label for="start">시작</label>
+                                <input class="form-control" id="start" name="start" />
+                            </div>
+                            <div>
+                                <label for="end">끝</label>
+                                <input class="form-control" id="end" name="end" />
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="note">손모양 라벨링</label>
+                            <select name="handpose" id="handpose" class="form-control" disabled>
+                                <option disabled selected value></option>
+                                <option value="손바닥 보이기">1. 손바닥 보이기</option>
+                                <option value="소지 펴기">2. 소지 펴기</option>
+                                <option value="주먹 바닥 보이기">3. 주먹 바닥 보이기</option>
+                                <option value="엄지 왼쪽">4. 엄지 왼쪽</option>
+                                <option value="엄지 오른쪽">5. 엄지 오른쪽</option>
+                                <option value="검지 흔들기">6. 검지 흔들기</option>
+                                <option value="엄지 위">7. 엄지 위</option>
+                                <option value="엄지 아래">8. 엄지 아래</option>
+                                <option value="피스 포즈">9. 피스 포즈</option>
+                                <option value="검지 중지 펴기">10. 검지 중지 펴기</option>
+                                <option value="손바닥 좁혔다펴기">11. 손바닥 좁혔다펴기</option>
+                                <option value="손바닥 좁히기">12. 손바닥 좁히기</option>
+                                <option value="엄지 소지 펴기(전화해 손모양)">13. 엄지 소지 펴기(전화해 손모양)</option>
+                                <option value="반짝반짝 흔들기">14. 반짝반짝 흔들기</option>
+                                <option value="엄지 검지 펴기">15. 엄지 검지 펴기</option>
+                                <option value="검지 손바닥 보이기">16. 검지 손바닥 보이기</option>
+                                <option value="손등 보이기">17. 손등 보이기</option>
+                                <option value="검지 손등 보이기">18. 검지 손등 보이기</option>
+                                <option value="오케이">19. 오케이</option>
+                            </select>
+                            <!-- hand pose skeleton coord -->
+                            <!-- <textarea id="skeleton" class="form-control" style="display:none;" rows="3" name="skeleton"></textarea> -->
+                            <!-- <textarea name="skeleton" id="skeleton" class="form-control" rows="3"></textarea> -->
+
+                            <input name="attributes" id="attributes" type="hidden" value="" />
+                        </div>
+                        <div>
+                            <label for="note">구간 전사</label>
+                            <select name="note" id="note" class="form-control" disabled>
+                              <!-- <textarea name="note"  id="note" class="form-control"></textarea> -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group fr-4">
+                        <div class="button-submit-delete">
+                            <button type="submit" id="clibSave" class="btn btn-primary btn-save">
+                                <i class="glyphicon glyphicon-ok"></i>&nbsp;
+                                <span>클립 저장(S)</span>
+                            </button>
+                        </div>
+                        <div class="button-submit-delete">
+                            <button type="button" id="clibDelete" class="btn btn-danger btn-block" onclick="deleteRegion()">
+                                <i class="glyphicon glyphicon-remove"></i>&nbsp;
+                                <span>클립 삭제(D)</span>
+                            </button>
+                        </div>
+                        <div>
+                          <button  id="final_complete" type="button" class="btn btn-success btn-block">
+                              <i class="glyphicon glyphicon-check"></i>&nbsp;
+                              <span>최종 제출</span>
+                          </button>
+                        </div>
+                    </div>
+                </form>
+                <!--
+                    반려 사유 선택
+                    검수자만 이용 가능
+                    검수 페이지에서만 보이게 템플릿 태그로
+                -->
+                <form name="returned">
+                    <div class="returned-work">
+                        <label for="returnedWork">반려 사유</label>
+                        <select name="rejection" class="form-control" id="returnedWork">
+                            <option value='반려 사유 없음'>반려 사유 없음</option>
+                            <option value='제스처 오태깅 : 명확한 동작에서 다른 항목으로 라벨링'>제스처 오태깅 : 명확한 동작에서 다른 항목으로 라벨링</option>
+                            <option value='제스처 과태깅 : 손동작이 바뀌는 프레임을 라벨링'>제스처 과태깅 : 손동작이 바뀌는 프레임을 라벨링</option>
+                            <option value='제스처 미태깅 : 손동작이 명확히 표시되지만 라벨링 하지 않음'>제스처 미태깅 : 손동작이 명확히 표시되지만 라벨링 하지 않음</option>
+                            <option value='음성전사 오태깅 :행동과 일치하여 명확하게 들리지만 타 항목으로 라벨링 (ex :시작 -> 시작해줘)'>음성전사 오태깅 :행동과 일치하여 명확하게 들리지만 타 항목으로 라벨링 (ex :시작 -> 시작해줘)</option>
+                            <option value='음성전사 과태깅 : 93종에 해당하지 않는 다른 항목으로 입력 (ex :스타트, 홀드 등)'>음성전사 과태깅 : 93종에 해당하지 않는 다른 항목으로 입력 (ex :스타트, 홀드 등)</option>
+                            <option value='음성전사 미태깅 : 음성 전사를 하지 않음'>음성전사 미태깅 : 음성 전사를 하지 않음</option>
+                        </select>
+                        <button type="button" class="btn btn-primary" id="addRejection">
+                            적용
+                        </button>
+                        <button type="button" class="btn btn-danger" id="removeRejection">
+                            해제
+                        </button>
+                    </div>
+                    <div class="right-btn">
+                        <button type="button" class="btn btn-success" id="inspectSuccess">
+                            <i class="glyphicon glyphicon-log-in"></i>&nbsp; 검사 완료
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+
+
+
+
+
+        <!-- form hidden 하지 않을 것 -->
+        <!-- <form role="form" name="edit" style="visibility: hidden; transition: opacity 300ms linear;"> -->
+
+
+    </div>
+
+
+
+
+
+    <!-- [js] START ------------------------------------------------------------------------------------------- -->
+    <script>  // video, xml 다운로드
+        $(document).ready(function () {
+            // video, xml ready
+
+            //     // 자동으로 db 저장된 video 다운로드
+            //     var file_path = document.getElementById('exportVideo').value;
+            //     var file_name = file_path.substring(file_path.lastIndexOf('/') + 1);
+            //     let linkElement = document.createElement('a');
+            //     linkElement.setAttribute('href', '/media/django_app/action_video/' + file_name);
+            //     linkElement.setAttribute('download', file_name);
+            //     linkElement.click();
+
+            //     // 자동으로 video와 이름이 같은 xml 다운로드
+            //     // var xml_path = "/media/django_app/action_xml/p01_1h_if_f40_20210829_103918(1) - 1of2.bcpf";
+            //     var xml_name = file_name.split('.')[0] + ".bcpf"
+            //     var xml_url = "/media/django_app/action_xml/" + xml_name;
+            //     // xml 파일 존재확인
+            //     $.get(xml_url)
+            //     .done(function() {
+            //         // exists code
+            //         let xmlLinkElement = document.createElement('a');
+            //         xmlLinkElement.setAttribute('href', '/media/django_app/action_xml/' + xml_name);
+            //         xmlLinkElement.setAttribute('download', xml_name);
+            //         xmlLinkElement.click();
+            //     }).fail(function() {
+            //         // not exists code
+            //         alert("대응하는 xml파일이 없습니다.")
+            //     })
+
+
+
+            // 가람
+            document.getElementById("handpose").disabled = true;
+            document.getElementById("note").disabled = true;
+            document.querySelector(".tool>div>button:nth-child(1)").disabled = true;
+            document.getElementById("modelLoad").disabled = true;
+            document.getElementById("modelReload").disabled = true;
+            document.querySelector(".btn-success").disabled = true;
+            document.querySelector(".btn-danger").disabled = true;
+            //경진
+            document.querySelector(".btn-save").disabled = true;
+
+            alert("\"작업 순서\" : video 업로드 => 작업 시작")
+        });
+
+
+        // video 다운로드 버튼을 누르는 것으로 변경
+        var file_path = document.getElementById('exportVideo').value;
+        var file_name = file_path.substring(file_path.lastIndexOf('/') + 1);
+
+        var fileDownload = document.getElementById("fileDownload");
+        fileDownload.addEventListener('click', e => {
+            let linkElement = document.createElement('a');
+            linkElement.setAttribute('href', file_path);
+            linkElement.setAttribute('download', file_name);
+            linkElement.click();
+
+            $(':focus').blur();
+        })
+
+        // xml 다운로드 버튼을 누르는 것으로 변경
+        // var xml_path = "/media/django_app/action_xml/p01_1h_if_f40_20210829_103918(1) - 1of2.bcpf";
+        var xml_name = file_name.split('.')[0] + ".bcpf"
+        var xml_url = "/media/django_app/action_xml/" + xml_name;
+
+        var xmlDownload = document.getElementById("xmlDownload");
+        xmlDownload.addEventListener('click', e => {
+            // xml 파일 존재확인
+            $.get(xml_url)
+                .done(function () {
+                    // exists code
+                    let xmlLinkElement = document.createElement('a');
+                    xmlLinkElement.setAttribute('href', '/media/django_app/action_xml/' + xml_name);
+                    xmlLinkElement.setAttribute('download', xml_name);
+                    xmlLinkElement.click();
+                }).fail(function () {
+                    // not exists code
+                    alert("대응하는 xml파일이 없습니다.\n관리자 문의바랍니다.")
+                })
+
+            $(':focus').blur();
+        })
+    </script>
+
+    <script>  // video 업로드
+        var mode = '검수'
+        // //상민
+        var store = {}
+
+        // video load button
+        const inputFile = document.getElementById("file");
+        const fileLoad = document.getElementById('fileLoad')
+        const video = document.querySelector("#orgVideo");
+
+        fileLoad.addEventListener('click', e => {
+            video.setAttribute('src', '');
+            inputFile.click()
+        })
+
+        inputFile.addEventListener("change", function () {
+            const file = inputFile.files[0]; // 업로드한 파일이름
+            if (!file) return
+            var file_path = document.getElementById('exportVideo').value;
+            var file_name = file_path.substring(file_path.lastIndexOf('/') + 1);
+
+            if (file.name != file_name) {
+                alert("다운로드한 video 파일과 다른 업로드 파일입니다.")
+            } else {
+
+                const videourl = URL.createObjectURL(file);
+                video.setAttribute("src", videourl);
+                video.setAttribute('alt', file.name);
+                video.classList.remove('active')
+                video.classList.remove('disable')
+                fileLoad.querySelector('span').textContent = file.name.split('.')[0]
+
+                loadVideo(null, '검수');
+                //onceRender();
+
+
+                // xml region 가져오기 버튼 활성화
+                // const target = document.getElementById('xmlLoad');
+                // target.disabled = false;
+
+
+                // 로딩화면
+                const video_rect = video.getBoundingClientRect();
+                const loader = document.querySelector(".loader");
+                loader.style.top = video_rect.top + (video_rect.height - 120) / 2 + "px";
+                // console.log(video_rect.top)
+                loader.style.left = video_rect.left + (video_rect.width - 120) / 2 + "px";
+
+                loader.classList.toggle("hide");
+
+                setTimeout(function () {
+                    loader.classList.toggle("hide");
+                }, 1800);
+
+                document.getElementById("handpose").disabled = false;
+                document.getElementById("note").disabled = false;
+                $("#handpose").not(":selected").attr("disabled", "disabled");
+                $("#note").not(":selected").attr("disabled", "disabled");
+                document.querySelector(".tool>div>button:nth-child(1)").disabled = false;
+                 //경진
+                //document.getElementById("modelLoad").disabled = false;
+                //document.getElementById("modelReload").disabled = false;
+                //document.querySelector(".btn-success").disabled = false;
+                //document.querySelector(".btn-danger").disabled = false;
+
+                document.getElementById("fileLoad").disabled = true;
+            }
+
+            // db 저장된 작업 존재할 경우 세트 버튼 생성
+            allRegions = [];
+            let inputRegion = "{{task_region|safe}}";
+            console.log("inputRegion-------------")
+            console.log(inputRegion)
+            // console.log(inputRegion);
+
+            if (inputRegion.length > 2) {  // '[]'의 sting 크기는 2
+
+                // if(inputRegion.slice(0,6) == "[{'id'"){
+                //
+                //     inputRegion = inputRegion.slice(6,-1);
+                //     let tmpArr = inputRegion.split(", {'id'");
+                //     for (let i = 0; i < tmpArr.length; i++) {
+                //         tmpArr[i] = "{'id'" + tmpArr[i]
+                //         tmpArr[i] = tmpArr[i].replace(/'/gi, '"');
+                //     }
+                //     for (let i = 0; i < tmpArr.length; i++) {
+                //         allRegions.push(JSON.parse(tmpArr[i]))
+                //     }
+                //
+                // }else if(inputRegion.slice(0,7) == "[{'end'"){
+                //
+                //     inputRegion = inputRegion.slice(7,-1);
+                //     let tmpArr = inputRegion.split(", {'end'");
+                //     for (let i = 0; i < tmpArr.length; i++) {
+                //         tmpArr[i] = "{'end'" + tmpArr[i]
+                //         tmpArr[i] = tmpArr[i].replace(/'/gi, '"');
+                //     }
+                //     for (let i = 0; i < tmpArr.length; i++) {
+                //         allRegions.push(JSON.parse(tmpArr[i]))
+                //     }
+                //
+                // }else{
+                //     console.log("selected db data format is not correct")
+                // }
+
+                inputRegion = inputRegion.replace(/'/gi, '"');
+                allRegions = JSON.parse(inputRegion)
+
+
+                // regions : 227 개 배열
+                let regionsLen = allRegions.length;
+
+                allRegions.forEach(elm=>{
+                    wavesurfer.addRegion(elm);
+                })
+                // allRegions : sort regionTag
+                var allRegions = [];
+                Object.keys(wavesurfer.regions.list).map(function (id) {
+                    // drag, resize : false
+                    wavesurfer.regions.list[id].update({drag: false, resize: false});
+
+                    // cp region info to allRegions
+                    allRegions.push(wavesurfer.regions.list[id])
+                })
+                allRegions.sort((a, b) => { // allRegions : arr(생성된 region 개수) [{regionId, startTime}, {regionId, startTime} ......] 정렬
+                    if (a.start > b.start) return 1
+                    if (a.start < b.start) return -1
+                    return 0
+                })
+
+                sptRegions = [];
+                // regions 5 요소씩 하위배열생성
+                for (var i = 0; i < regionsLen; i += 5) sptRegions.push(allRegions.slice(i, i + 5));
+                // for(var i=0; i<sptRegions.length; i++) console.log(sptRegions[i]);
+                // console.log(sptRegions);
+
+                // 클립 5개 묶음 버튼 생성
+                setClipButton(sptRegions.length);
+
+                // //상민
+                window.store['allRegions'] = allRegions
+                window.store['clipInfo'] = clipInfo
+                window.store['sptRegions'] = sptRegions
+                console.log(store)
+
+                // final_complete check
+                let completeCnt = 0
+                document.querySelectorAll('#sets').forEach(el => {
+                    if(el.classList.contains('complete')){
+                        completeCnt++;
+                    }
+                });
+                var ele = document.getElementById('div_btn');
+                var eleCount = ele.childElementCount;
+                if(completeCnt == eleCount){
+                    document.getElementById("final_complete").disabled = false;
+                }
+            }
+
+            // //상민
+            setMarkInit()
+        })
+
+        // function selectedCheck(){
+        //     var handpose = document.querySelector('#handpose')
+        //     var note = document.querySelector('#note')
+
+        //     if(handpose.value && note.value){
+        //         return {
+        //             handpose: handpose.value,
+        //             note: note.value,
+        //             check: true,
+        //         }
+        //     }else{
+        //         return {
+        //             handpose: handpose.value,
+        //             note: note.value,
+        //             check: false,
+        //         }
+        //     }
+        // }
+
+        //selectedCheck()
+    </script>
+
+
+    {% include 'django_app/include/interface_foot_script.html' %}
+
+    <!-- 푸터 -->
+    <footer class="container-fluid footer">
+        <div class="footer_container">
+            <p>광주인공지능센터</p>
+            <p>주소: 광주 동구 동계천로 150 / 문화전당역4번 출구에서 683m</p>
+            <p><span class="glyphicon glyphicon-earphone"></span> 062-223-1335</p>
+        </div>
+    </footer>
+    <!-- fabric -->
+    <script>
+        $.ajaxSetup({
+            headers: {
+                "X-CSRFToken": '{{csrf_token}}'
+            }
+        });
+    </script>
+
+
+    <!-- <script>
+    $(document).ready(function() {
+        var file_path = document.getElementById('orgVideo').getAttribute('src');
+        var file_name = file_path.substring(file_path.lastIndexOf('/') + 1);
+
+        // $.ajax({
+        //     url : '../../file_download/' + file_name,
+        //     type : 'GET', // get post put delete
+        //     // data : {
+        //     //     video_name : file_name,
+        //     // },
+        //     success : function(data){
+        //         console.log('hhh');
+        //     }
+        //     });
+        let linkElement = document.createElmeent('a');
+        linkElement.setAttribute('href', '/media/django_app/action_video/' + file_name);
+        linkElement.setAttribute('download', file_name);
+        linkElement.click();
+
+    });
+
+</script> -->
+
+    <!-- <script src="{%static 'django_app/js/tool/submit.js' %}"></script>
+    <script src=" {% static 'django_app/js/tool/fabric.min.js'%}"></script>
+
+    <script src="{% static 'django_app/js/tool/bounding_util.js'%}"></script> -->
+    <!-- <script src=" {% static 'django_app/js/tool/labeling.js'%}"></script> -->
+<script>
+
+  /*function formMessage(e){
+
+    let form = e.currentTarget.parentNode
+    let classList = e.currentTarget.classList
+    // if(e.currentTarget.classList)
+
+    if(classList.contains('choice_1')){
+      Swal.fire({
+        title: '정말 취소하시겠습니까?',
+        showDenyButton: true,
+        confirmButtonText: '확인',
+        denyButtonText: '취소',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          form.submit()
+        } else if (result.isDenied) {
+          return
+        }
+      })
+    }else if(classList.contains('choice') && !classList.contains('loading-middle')){
+      Swal.fire({
+        title: '작업 하시겠습니까?',
+        showDenyButton: true,
+        confirmButtonText: '확인',
+        denyButtonText: '취소',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          form.submit()
+        } else if (result.isDenied) {
+          return
+        }
+      })
+    }else if(classList.contains('choice') && classList.contains('loading-middle'))
+
+    Swal.fire({
+        title: '작업 하시겠습니까?',
+        showDenyButton: true,
+        confirmButtonText: '확인',
+        denyButtonText: '취소',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const processForm = document.querySelector('#processForm')
+          processForm.addEventListener('click', e => {
+              if(e.target.nodeName !== 'BUTTON') return
+              // if(e.target.classList.indexOf('choice') !== -1){
+                const processLoading = document.querySelector('.process-loading')
+                processLoading.classList.add('active')
+              // }
+          })
+
+          form.submit()
+        } else if (result.isDenied) {
+          return
+        }
+      })
+  }*/
+</script>
+    <script>
+      const final_complete = document.getElementById('final_complete')
+      final_complete.addEventListener('click', e => {
+        $.ajax({
+            url: "task_complete",
+            type: "POST",
+            data: JSON.stringify({
+              task_num : document.getElementById('tasknumber').value,
+              group: document.getElementById("groupId").value,
+            },),
+            success: function(){
+            window.location.assign('/mywork')
+            },
+            error: function(){
+            // console.log('error')
+            }
+        })
+      })
+
+      const inspectSuccess = document.getElementById('inspectSuccess')
+      inspectSuccess.addEventListener('click', e => {
+        $.ajax({
+            url: "task_complete",
+            type: "POST",
+            data: JSON.stringify({
+              task_num : document.getElementById('tasknumber').value,
+              group: document.getElementById("groupId").value
+            },),
+            success: function(){
+            window.location.assign('/mywork')
+            },
+            error: function(){
+            // console.log('error')
+            }
+        })
+      })
+    </script>
+</body>
+
+</html>

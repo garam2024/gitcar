@@ -1,0 +1,111 @@
+{% extends 'django_app/base.html' %}
+{% load static %}
+{% block contents %}
+<link rel="icon" href="{% static 'django_app/img/logo/gjac_favicon.ico' %}">
+<link rel="stylesheet" href="{% static 'django_app/css/color.css' %}">
+
+
+    
+    <div class="workMain">
+        <div class="titleMargin">
+
+            <div class="workMain_2">
+                <div class="flex_row">
+                  <div><img src="{% static 'django_app/img/menu/arrow.svg' %}"></div>
+                  <div class="labellingWork">나의 작업 기록</div>
+                </div>
+                <div class="tableOver_1">
+                        <table class="worktable">
+                                <thead>
+                                    <tr>
+                                        <th style="width:10%;">작업 번호</th>
+                                        <th style="width:20%;">파일 명</th>
+                                        <th style="width:8%;">1차검수</th>
+                                        <th style="width:8%;">2차검수</th>
+                                        <th style="width:8%;">3차검수</th>
+                                        <th style="width:20%;">클립 수[가공/검수<br>핸드포즈(완료/실패)]</th>
+                                        <th style="width:10%;">작업 상태</th>
+                                        <!--<th style="width:10%;">등록 날짜</th>-->
+                                        <th style="width:10%;">반려 메시지</th>
+                                        <th style="width:6%;">재작업</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                     {% for task in task_record_list %}
+                                    <tr>
+                                         <td>{{task.work_id}}<br>({{task.work_type_nm}})</td>
+                                         <td>{{task.video_path}}</td>
+                                         <td>{{task.inspect1_start|date:"m-d"}}</td>
+                                         <td>{{task.inspect2_start|date:"m-d"}}</td>
+                                         <td>{{task.inspect3_start|date:"m-d"}}</td>
+                                         <td>{{clip_cnt_workers}} / {{clip_cnt_inspects}}<br>({{clip_handpose_success}} / {{clip_handpose_fail}})</td>
+                                         <td>{{task.work_status_nm}}</td>
+                                         <!--<td>{{task.reg_date|date:"Y-m-d" }}[{{ task.reg_date|time:"H:i" }}]</td>-->
+                                         <td><div class="mytask-memo">{{task.memo|truncatechars:9}}</div></td>
+
+                                        {% if task.work_status == "C" or task.work_status == "R0" or task.work_status == "R1" %}
+                                            <td>
+                                                <form action="{% url 're_work_process' task.work_id task.work_type %}" method="post">
+                                                {% csrf_token %}
+                                                    <button type="button" class="choice" onclick='formMessage(event)'>재작업</button>
+                                                </form>
+                                             </td>
+                                        {% else %}
+                                            <td></td>
+
+                                        {% endif %}
+
+                                        {% empty %}
+                                         <tr>
+                                           <td colspan="9">
+                                             작업 기록이 없습니다.
+                                           </td>
+                                         </tr>
+                                    </tr>
+                                    {% endfor %}
+
+
+                                </tbody>
+                        </table>
+                        <nav class="paging">
+                            {% if task_record_list.has_other_pages %}
+                              <ul class = "pagination modal">
+
+                                {% if task_record_list.has_previous %}
+                                  <li><a class="first" href="?page=1">처음</a></li>
+                                  <li><a href="?page={{ task_record_list.previous_page_number }}"> < </a></li>
+                                {% else %}
+                                  <li class="page-item disabled"> <a class="page-link" href="#">처음</a>
+                                  </li> <li class="page-item disabled"> <a class="page-link" href="#"> < </a> </li>
+                                {% endif %}
+
+                                {% for i in page_range %}
+                                  {% if task_record_list.number == i %}
+                                    <li><a class="active num" href="?page={{ i }}">{{ i }} </a></li>
+                                  {% else %}
+                                    <li><a class="num" href="?page={{ i }}">{{ i }}</a></li>
+                                  {% endif %}
+                                {% endfor %}
+
+                                {% if task_record_list.has_next %}
+                                   <li><a href="?page={{ task_record_list.next_page_number }}"> > </a></li>
+                                   <li><a class="last" href="?page={{ task_record_list.paginator.num_pages }}">끝</a></li>
+                                {% else %}
+                                  <li class="page-item disabled"> <a class="page-link" href="#"> > </a> </li>
+                                  <li class="page-item disabled"> <a class="page-link" href="#">끝</a> </li>
+                                {%endif %}
+
+                                </ul>
+                            {%endif%}
+                        </nav>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+{% endblock %}
+<script src="{% static 'django_app/js/tool/button.js' %}"></script>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이상 행동</title>
+    <link rel="icon" href="{% static 'django_app/img/logo/gjac_favicon.ico' %}">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <!-- Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"><!-- css -->
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> <!-- 테마 -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> <!-- 자바스크립트 -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <!-- stylesheet -->
+    <link rel="stylesheet"  href="{%static 'django_app/car_abnormal/css/style.css' %}" />
+    <link rel="stylesheet" href="{%static 'django_app/car_abnormal/css/ribbon.css' %}" />
+
+    <!-- wavesurfer -->
+    <script src="https://unpkg.com/wavesurfer.js/dist/wavesurfer.js"></script>
+    <script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.timeline.js"></script> <!-- timeline plugin -->
+    <script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.regions.js"></script> <!-- regions plugin -->
+    <script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.minimap.js"></script> <!-- minimap plugin -->
+    <script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.cursor.js"></script> <!-- cursor plugin -->
+    <script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.markers.js"></script> <!-- markers plugin -->
+    <link rel="screenshot" itemprop="screenshot" href="https://katspaugh.github.io/wavesurfer.js/example/screenshot.png" /> <!-- example img -->
+
+    <!-- fabric -->
+    <script>
+        (function () {
+            var fabricUrl = "{%static 'django_app/car_abnormal/js/fabric.js' %}";
+            if (document.location.search.indexOf('load_fabric_from=') > -1) {
+                var match = document.location.search.match(/load_fabric_from=([^&])/);
+                if (match && match[1]) {
+                    fabricUrl = match[1];
+                }
+            }
+            document.write('<script src="' + fabricUrl + '"><\/script>');
+        })();
+    </script>
+    <script>
+    var memo = '{{task_info.memo}}';
+    const memoArray = memo.split("/");
+    memoArray.pop();
+
+    var group_id = '{{task_info.group_id}}';
+    var work_id = '{{task_info.work_id}}';
+    var work_status = '{{task_info.work_status}}'
+    let filePath = '{{task_info.video_path}}';
+    var fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
+    function downLoadFile(){
+        var a = $("<a>")
+            .attr("href", filePath)
+            .attr("download", fileName)
+            .appendTo("body");
+            a[0].click();
+            a.remove();
+    };
+    </script>
+
+
+<body itemscope itemtype="http://schema.org/WebApplication">
+    <!-- <div class="page-loading">
+        <div class="message">
+            데이터를 전송 중입니다.
+        </div>
+        <div class="spinner">
+            <i class="fas fa-spinner fa-10x"></i>
+        </div>
+    </div>
+    <div class="modal-background">
+        <div class="modal-window">
+            <div>
+                <div class="message">
+                    작업을 완료할 경우 재작업을 할 수 없습니다.<br>
+                    작업을 완료하시겠습니까?
+                </div>
+            </div>
+            <div>
+                <button data-modal="sure" class="button-check">확인</button>
+                <button data-modal="cancel" class="button-normal">취소</button>
+            </div>
+        </div>
+    </div> -->
+    <!-- <title>Bounding Page</title>
+    <div class="header-space"></div>
+    <nav class="labeling-page-nav">
+        <aside class="inner">
+            <h3>작업 완료 확인</h3>
+            <div>
+
+            </div>
+        </aside>
+        <div class="toggle-button">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </nav> -->
+    <input type="hidden" id="work_status" value="{{task_info.work_status}}">
+
+    <div id="demo">
+    <div id="clipList">
+        <div>
+            <h2>세트 영역</h2>
+            <div id="sets">
+            </div>
+        </div>
+        <div>
+            <h2>클립 영역</h2>
+            <div id="clips">
+            </div>
+        </div>
+        <div id = rejcetMemo>
+        </div>
+    </div>
+    <section class="editing-area">
+        <div class="editing-area-nav">
+            <h2>편집 영역</h2>
+            <div id="pageBtnArea">
+            </div>
+        </div>
+        <div>
+            <div id="canvas-area" class="disable">
+                <!-- This video comes from NASA Video Gallery https://www.youtube.com/watch?v=Zg7i4q_EX9E -->
+                <video id="orgVideo" style="display:block; margin: 0 auto; position: absolute;" src="" type="video/mpeg"></video>
+                <canvas id="tmpCanvas" style="display: none;"></canvas>
+                <canvas id="canvas" style="display:block; position: absolute; z-index:-1"></canvas>
+                <canvas id="c" style="position: relative; z-index: 20;"></canvas>
+            </div>
+            <div>
+                <p id="subtitle" class="text-center text-info"> </p>
+                <div class="wavesufer-area">
+                    <div id="wave-timeline"></div>
+                    <div id="waveform">
+                        <!-- Here be the waveform -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="video-tools-task">
+            <button id="playBtn" data-action="play" class="btn btn-default btn-block">
+                <span id="play">
+                    <i class="glyphicon glyphicon-play"></i>
+                    play
+                </span>
+                <span id="pause" style="display: none">
+                    <i class="glyphicon glyphicon-pause"></i>
+                    pause
+                </span>
+            </button>
+            <button id="downloadBtn" class="btn btn-default btn-block" onclick="downLoadFile()">
+                <i class="glyphicon glyphicon-save"></i>
+                <span> 다운로드</span>
+            </button>
+            <button id="fileLoad" class="btn btn-default btn-block fileLoad" title="load file">
+                <i class="glyphicon glyphicon-open"></i>
+                <span> 업로드</span>
+            </button>
+            <button id="clibDelete" type="button" class="btn btn-danger btn-block" data-action="delete-region" onclick="ClickRemoveBtn()">
+                <i class="glyphicon glyphicon-trash"></i>
+                삭제
+            </button>
+            <button id="frameChange" type="button" class="btn btn-info btn-block"  onclick="frameChagne()">
+                <i class="glyphicon glyphicon-transfer"></i>
+                프레임 변경
+            </button>
+            <button id="frameChange" type="button" class="btn btn-primary btn-block"  onclick="copyPreLabel()">
+                <i class="glyphicon glyphicon-repeat"></i>
+                작업 불러오기
+            </button>
+            <input id="file" type="file" accept="video/mp4,video/mkv, video/x-m4v,video/*" class="hidden">
+            <!-- <button id="exportBtn" class="btn btn-info btn-block" data-action="export" title="Export annotations to JSON" disabled>
+                <i class="glyphicon glyphicon-file"></i>
+                <span>Export</span>
+            </button> -->
+        </div>
+    </section>
+    <div id="labelResult">
+        <div>
+            <h2>클립 정보</h2>
+            <div id="clipArea">
+            </div>
+        </div>
+        <div>
+            <h2>탑승자 정보</h2>
+            <div id= "occupantArea">
+            </div>
+        </div>
+        <div>
+            <h2>라벨링 영역</h2>
+            <div id="labelingArea">
+                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                </div>
+            </div>
+        </div>
+        <div class="work-complete">
+            <button id="saveBtn" class="btn btn-success btn-block" onclick="DataToString()" disabled>
+                <i class="glyphicon glyphicon-saved"></i>
+                <span> 작업 저장</span>
+            </button>
+            <button id="workComplete" class="btn btn-success btn-block" onclick="changeWorkComplete()" disabled>
+                <i class="glyphicon glyphicon-circle-arrow-right"></i>
+                <span> 최종 완료</span>
+            </button>
+        </div>
+    </div>
+</div>
+    <div class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document" style="width:1430px;max-width: 1430px">
+            <div class = "modal-content">
+                <div class="modal-header">
+                    <div class="modal-title"><h4>프레임 변경</h4></div>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="modalFadeOut()">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="change-image-list">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- js -->
+<script src="{%static 'django_app/car_abnormal/js/trivia.js' %}"></script>
+<script src="{%static 'django_app/car_abnormal/js/imageLabeling.js' %}"></script>
+<script src="{%static 'django_app/car_abnormal/js/occupant.js' %}"></script>
+<script src="{%static 'django_app/car_abnormal/js/main.js' %}"></script>
+<script src="{%static 'django_app/car_abnormal/js/loadWave.js' %}"></script>
+
+    <!-- 푸터 -->
+    {% include "django_app/include/footer.html" %}
+
+    <script>
+        $.ajaxSetup({
+            headers: { "X-CSRFToken": '{{csrf_token}}' }
+        });
+    </script>
+</body>
+</html>

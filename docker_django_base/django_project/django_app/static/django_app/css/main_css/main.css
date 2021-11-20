@@ -1,0 +1,36 @@
+/* body, html {
+  margin:0;
+  padding:0;
+}
+
+.body-portal {
+  display:flex;
+  flex-direction: row;
+}
+
+.mainPage{
+  display:flex;
+  flex-direction:column;
+  list-style: none;
+}
+
+.workBoard {
+  border:1px solid gray;
+}
+
+.menuBg {
+  background-color:white;
+  box-shadow:1px 1px 1px gray;
+}
+
+.mainMenu li input {
+  user-select: auto;
+    background-color: white;
+    border: white;
+}
+
+.menuImg{
+  width:50ox;
+  height:50px;
+}
+ */

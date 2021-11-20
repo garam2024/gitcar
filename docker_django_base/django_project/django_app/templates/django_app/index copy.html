@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+
+{% load static %}
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>AI cloud :: Portal</title>
+
+	<!-- Our Custom CSS -->
+	<link rel="stylesheet" href="{% static 'django_app/css/layout_portal.css' %}">
+
+  
+
+	<!-- Scrollbar Custom CSS -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+	<!-- favicon -->
+	<link rel="shortcut icon" href="../../assets/images/aicloud_favicon.ico">
+</head>
+
+<body class="body-portal">
+  <div id="main-container">
+	<header id="header"nt>
+					<a class="navbar-brand" href="index.html"><img alt="AI cloud" src="../../assets/images/gjac/gjac_logo.png"></a>
+	</header>
+
+  <!-- workTitle -->
+  <span id="workTitle" class="middle"><div>상품인지 데이터 라벨링 작업</div>
+  </span>
+  <ul class="main-menu">
+    <li class="login"><a href="index_login.html" title="로그인"><i class="icon-lock2"></i><strong>로그인</strong></a></li>
+    <li>
+      <a href="#" id="menu1" aria-expanded="false">라벨링 하기</a>
+    </li>
+    <li class="current">
+      <a href="#" id="menu2" aria-expanded="false">검수하기</a>
+    </li>
+    <li>
+      <a href="#" id="menu3" aria-expanded="false">가이드라인</a>
+      <ul class="sub-menu" aria-describedby="menu3">
+        <li><a href="#">가이드 모드</a></li>
+        <li><a href="#">가이드 창띄우기</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#" id="menu4" aria-expanded="false">나의 성과</a>
+    </li>
+  </ul>
+  <span id="workMain">		<div class="form-login-wrap">
+  <h3>로그인</h3>
+    <div class="form-body">
+
+      <form action = "{% url 'main'%}" class="form-login" id = "login_form" method="post">
+        {% csrf_token %}
+        <div class="form-group form-group-xl">
+          <label class="sr-only">아이디</label>
+          <div class="fixed-item-icon fixed-item-left">
+            <i class="icon-user text-gray-9"></i>
+            <input id = "user_id" name = "user_id" type="email" class="form-control" placeholder="아이디">
+          </div>
+        </div>
+        <div class="form-group form-group-xl">
+          <label class="sr-only">패스워드</label>
+          <div class="fixed-item-icon fixed-item-left">
+            <i class="icon-lock2 text-gray-9"></i>
+            <input id = "user_pw" name = "user_pw" type="password" class="form-control" placeholder="패스워드">
+          </div>
+        </div>
+        <div class="clearfix mt-15">
+          <div class="pull-left">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox"> 아이디 저장
+              </label>
+            </div>
+          </div>
+          <div class="pull-right">
+            <ul class="list-inline list-bar">
+              <li><a href="00_member_forgot_id.html">회원가입</a></li>
+              <li><a href="00_member_forgot_password.html">ID/PW 찾기</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="btn-area mt-25">
+          <button id = "login_submit_btn" type="button" class="btn btn-primary btn-xl btn-block">로그인</button>
+        </div>
+ 
+      </form>
+    </div>
+  </div>
+  </span>
+</div>
+
+	<div class="footer">
+
+		<div class="footer-address">
+			<div class="container">
+				<div class="pull-left">
+					<ul class="list-inline list-bar company-info">
+						<li>(주)광주인공지능센터</li>
+						<li>광주광역시 동구 동계천로 150 IPLEX(아이플렉스) 5층[510호]</li>
+						<li>대표이사 : 이경일</li><br>
+					</ul>
+					<p class="copyright">Copyright (C)<a href="http://www.saltlux.com/" target="_blank">Saltlux</a>. All Rights reserved</p>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+
+  <script src="{% static 'django_app/jquery/jquery-3.1.0.js' %}"></script>
+
+	
+    <!-- jQuery Custom Scroller CDN -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+
+
+  <script>
+    $(function() {
+      $("#user_id, #user_pw").on("keypress", function(e){
+        if(e.keyCode == "13"){
+          $("#login_submit_btn").click();
+        }
+      });
+    
+      $("#login_submit_btn").on("click", function() {
+
+        if($("#user_id").val() == "") {
+          $("#user_id").focus();
+          return false;
+        } 
+        if($("#user_pw").val() == "") {
+          $("#user_pw").focus();
+          return false;
+        }
+
+        var uid = $("#user_id").val()
+        var upw = $("#user_pw").val()
+
+        console.log(uid, upw)
+    
+        $("#login_form").submit();
+      });
+    });
+    </script>
+
+
+
+</body>
+
+</html>

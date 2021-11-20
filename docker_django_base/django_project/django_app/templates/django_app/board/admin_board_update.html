@@ -1,0 +1,39 @@
+{% load static %}
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<main class="board-container update">
+     <form method="post" name="writeForm">
+     {% csrf_token %}
+      <input type="hidden" name="content_id" value="{{ board_content.content_id }}">
+      <div class="form-group">
+        <input type="text" class="form-control" name="title" id="title" value="{{ board_content.title }}" placeholder="제목을 입력하세요.">
+      </div>
+      <div class="form-group">
+        <div id="editor">
+        </div>
+        <input type="hidden" name="editor" value="{{ board_content.content }}">
+      </div>
+     <div class="option">
+         <div>
+             <select name="option" class="form-control">
+                 {% if board_content.option == '공지' %}
+                 <option value="normal">일반 글
+                 <option value="notice" selected>공지 글</option>
+                 {% else %}
+                 <option value="normal" selected>일반 글
+                 <option value="notice">공지 글</option>
+                 {% endif %}
+             </select>
+         </div>
+         <div>
+             <button type="submit" class="btn btn-primary btn-sm">수정하기</button>
+             {% if url == 'mypage' %}
+                <a href="{% url 'mypage_board_list' %}" class="btn btn-primary btn-sm">취소</a>
+             {% else %}
+                <a href="{% url 'admin_board_list' %}" class="btn btn-primary btn-sm">취소</a>
+             {% endif %}
+         </div>
+     </div>
+    </form>
+</main>
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script src="{% static 'django_app/car_interface/js/quillEditor.js' %}"></script>

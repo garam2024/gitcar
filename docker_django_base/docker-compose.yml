@@ -1,0 +1,66 @@
+version: '3'
+services:
+
+        django_vehicle_task_2:
+                build:
+                        context: ./Dockerfiles
+                        dockerfile: Dockerfile_django
+
+                container_name: django_vehicle_task_2
+
+                working_dir: /code/django_project        
+
+                command: >
+                        bash -c "python manage.py makemigrations django_app && python manage.py migrate
+                        && ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
+                        && sh /code/django_project/django_app/Tools/back_proc.sh
+                        && gunicorn --workers=20 --bind 0.0.0.0:8000 django_project.wsgi:application --access-logfile access.log --error-logfile error.log"
+                        
+                volumes:
+                        - ./django_project:/code/django_project
+                expose:
+                        - "8000"
+                        
+                ports:
+                        - "9202:9202"
+                
+                depends_on:
+                        - postgres_vehicle_task_2
+
+        nginx_vehicle_task_2:
+                image: nginx:latest
+                container_name: nginx_vehicle_task_2
+                ports:
+                        - "18602:80"
+                working_dir: /etc/nginx/conf.d
+                volumes:
+                        - ./conf/nginx:/etc/nginx/conf.d
+                        - ./django_project/django_app/static:/static
+                        - ./html:/usr/share/nginx/html
+                depends_on:
+                        - django_vehicle_task_2
+
+        postgres_vehicle_task_2:
+                image: postgres:latest
+                container_name: postgres_vehicle_task_2
+                expose:
+                        - "5432"
+                ports:
+                        - "15502:5432"
+                restart: always
+
+                volumes:
+                        - ./init/:/docker-entrypoint-initdb.d/
+                        - ./pgdata:/var/lib/postgresql/data
+
+                environment:
+                        - POSTGRES_DB=gaic_db
+                        - POSTGRES_USER=gaic
+                        - POSTGRES_PASSWORD=gaic123!@#
+                        - PGDATA=/var/lib/postgresql/data/pgdata       
+                
+networks:
+        default:
+                name: vehicle_task_2_network 
+
+                        

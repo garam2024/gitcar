@@ -1,0 +1,365 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6{
+    margin: 0 0 8px;
+}
+
+body{
+    font-family: 'Malgun Gothic', 'sans-serif';
+}
+
+button{
+    overflow: hidden;
+}
+
+/* Space out content a bit */
+/* body {
+    padding-top: 20px;
+    padding-bottom: 20px;
+} */
+
+/* Everything but the jumbotron gets side spacing for mobile first views */
+.header,
+.marketing,
+.footer {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Custom page header */
+.header {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+/* Make the masthead heading the same height as the navigation */
+.header h3 {
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 40px;
+    padding-bottom: 19px;
+}
+
+/* Custom page footer */
+.footer {
+    padding-top: 19px;
+    color: #777;
+    border-top: 1px solid #e5e5e5;
+}
+
+/* Customize container */
+@media (min-width: 1024px) {
+    .container {
+        max-width: 900px;
+    }
+}
+
+.container-narrow > hr {
+    margin: 30px 0;
+}
+
+/* Supporting marketing content */
+.marketing {
+    margin: 40px 0;
+}
+
+.marketing p + h4 {
+    margin-top: 28px;
+}
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 768px) {
+    /* Remove the padding we set earlier */
+    .header,
+    .marketing,
+    .footer {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    /* Space out the masthead */
+    .header {
+        margin-bottom: 30px;
+    }
+}
+
+.controls {
+    padding: 30px 0 15px;
+    text-align: center;
+}
+
+.controls .btn {
+    margin-bottom: 15px;
+}
+
+@media screen and (min-width: 990px) {
+    .controls .mark-controls {
+        display: inline;
+    }
+}
+
+.lead {
+    text-align: center;
+    padding: 20px;
+}
+
+#demo.vertical {
+    justify-content: space-between;
+}
+
+#waveform {
+    position: relative;
+}
+
+.vertical {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.vertical #demo {
+    margin-right: 30px;
+}
+
+#waveform.vertical {
+    height: 400px;
+}
+
+#progress-bar {
+    position: absolute;
+    z-index: 10;
+    top: 50%;
+    margin-top: -10px;
+    left: 5%;
+    width: 90%;
+}
+
+#drop {
+    border: 3px dashed #ddd;
+    padding: 30px;
+}
+
+#drop.wavesurfer-dragover {
+    border-color: #333;
+}
+
+.video-form{
+    position: relative;
+    overflow: hidden;
+}
+
+.video-form video{
+    position: absolute;
+    width: 100%;
+    height: 300px;
+    left: 0;
+    top: 0;
+}
+
+
+
+.video-form video.active{
+    background-color: #eee;
+    border-radius: 8px;
+    border: 3px dashed #444;
+}
+
+#frames{
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+#clips video{
+    /* width: 100%; */
+    margin-bottom: 8px;
+}
+
+
+
+.sets-container{
+    width:160px;
+    margin-left: 16px;
+}
+
+.frames-container,
+.clips-container{
+    /* width:200px; */
+    max-width: 200px;
+}
+
+.clips-container #clips{
+    display: flex;
+    flex-direction: column;
+}
+/* 가람수정 */
+
+
+
+
+
+
+
+
+.btn-block + .btn-block{
+    margin-top: 0;
+}
+
+
+
+.input-begin-end > div{
+    width: 100%;   
+}
+
+.input-begin-end > div:first-child{
+    margin-right: 8px;
+}
+
+.button-submit-delete{
+    display: flex;
+    margin-top: auto;
+}
+
+.button-submit-delete button{
+    width: 100%;
+}
+
+#saveResult{
+    width: 100%;
+}
+
+#div_btn .btn-small{
+    width: 100%;
+}
+
+/* Ŭ�� ���̶����� */
+.yellow {
+    border :5px solid red;
+  }
+
+/* 로딩화면 */
+.loader {
+    border: 16px solid #f3f3f3;
+    border-top: 16px solid #6498db;
+    border-radius : 50%;
+    width:120px;
+    height:120px;
+    animation: spin 1s linear infinite;
+    position:fixed;
+    /*top:50%;
+    left:50%;*/
+    /*transform : translate(-50%,-50%);*/
+    z-index:999;
+}
+@keyframes spin {
+    0% {transform: rotate(0deg);}
+    100% {transform: rotate(360deg);} 
+}
+.hide {
+    display:none;
+}
+
+/* 가람수정 */
+.sets-container,
+.frames-container,
+.clips-container{
+  
+    top: 8px;
+    height: 675px;
+    padding: 0px;
+
+    overflow: auto;
+}
+.sets-container, .clips-container, .frames-container {
+  width:100%;
+  max-width:100%;
+  display:flex;
+  flex-direction: column;
+  height:200px;
+  margin-left:16px;
+  height:120px;
+}
+
+.clips-container #clips, .frames-container #frames {
+  display:flex;
+  flex-direction:row;
+}
+
+.clips-container #clips video, .frames-container #frames img{
+  width:20% !important;
+  height:80px;
+}
+
+.tool {
+  display:flex;
+  flex-direction: row;
+  column-gap: 8px;
+  margin: 8px 0;
+  margin-left:16px;
+  width:600px;
+}
+
+.tool div{
+  width:calc(100%/2);
+}
+
+#div_btn {
+  display: grid;
+  grid-template-columns : repeat(auto-fill, minmax(20%, auto));
+}
+
+
+form {
+  padding-left:16px;
+}
+
+.form-group{
+  display: grid;
+  grid-template-columns: 6fr 6fr;
+  column-gap: 8px;
+  row-gap: 13px;
+  width:600px;
+}
+#demo{
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+  margin : 0 auto;
+}
+
+.work_board{
+  margin-top:auto;
+  row-gap:3px;
+  display:grid;
+}
+.video-nav h2{
+  top: 0;
+  padding: 0 0 8px;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.input-begin-end {
+  display:none;
+}
+.video-nav{
+  display: grid;
+  grid-template-rows : 1fr 1fr 1fr 2fr;
+  max-width:600px;
+  padding:10px 0px;
+  row-gap:10px;
+}
+
+.empty-space{
+  height: 300px;
+  width:800px;
+}
+
+.modelLoad_div {
+ 
+}
+
+
+/* #d58b72:탁한분홍색 #82b2b2:탁한민트색 #685c4e:고동색 #ebc5b8:분홍색 #2e4442:진한청록색 */

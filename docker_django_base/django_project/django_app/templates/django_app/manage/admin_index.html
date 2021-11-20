@@ -1,0 +1,274 @@
+{% extends 'django_app/manage/admin_base.html' %}
+{% load static %}
+
+{% block contents %}
+
+       <!-- Latest compiled and minified CSS -->
+       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+       <!-- jQuery library -->
+       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+       <!-- Latest compiled JavaScript -->
+       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+       <!-- lodash -->
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+
+
+       <link rel="stylesheet" href="{%static 'django_app/css/commons.css' %}">
+       <link rel="stylesheet" href="{%static 'django_app/css/admin_index.css' %}">
+
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script>
+            $(function() {
+                $("#datepicker1,#datepicker2").datepicker({
+                     dateFormat: 'yy-mm-dd'
+                });
+                jsf_ajax_dataloading(0)
+                paging(currentPage);
+            });
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
+        <!--FileSaver savaAs 이용 -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
+
+<body>
+
+  {% for message in messages %}
+
+
+  <div id="adminAlert" style="display:none;">{{ message }}</div>
+
+{% endfor %}
+
+
+    <main class="admin-page">
+
+        <section>
+           {% include "../include/project_progress.html" %}
+            <div class="work-view-title">
+                <h3>작업 현황  <span id="totalcnt">[전체건수:]</span></h3>
+                <button id="exportExcelData" type="buttpm" class="btn btn-primary btn-lg">엑셀 내보내기</button>
+            </div>
+                <div class="tab-table claer">
+                    <form action = "{% url 'admin_index' %}" method="POST" name="searchForm">
+                        {% csrf_token %}
+                        <div class="searchCondition" name="searchCondition">
+                            <div class="search">
+                                <div class="condition">
+<!--                                    작업 자 :-->
+                                    <select id="workerType" name="workerType" class="form-control" onchange="jsf_change()">
+                                        <option value="worker_id">작업자</option>
+                                        <option value="inspect_id1">1차검수자</option>
+                                        <option value="inspect_id2">2차검수자</option>
+                                        <option value="inspect_id3">3차검수자</option>
+                                        <option value="work_id">작업번호</option>
+                                    </select>
+
+                                </div>
+
+                                <div class="condition">
+<!--                                    작업자 이름 :-->
+                                    <input id="workerNm" class="form-control" name="workerNm" type="text" placeholder="작업자 이름"  autocomplete='off'>
+                                </div>
+                                <div class="condition">
+<!--                                    작업 종류 :-->
+                                    <select id="workType" name="workType" class="form-control">
+                                        <option value="">작업종류</option>
+                                        <option value="interface">인터페이스</option>
+                                        <option value="normal">이상행동</option>
+                                    </select>
+                                </div>
+                                <div class="condition">
+<!--                                    작업 상태 :-->
+                                    <select id="workStatus" name="workStatus" class="form-control">
+                                        <option value="">작업상태</option>
+                                        {% for status in dbinfostatus %}
+                                            <option value="{{status.code_id}}">{{status.code_nm}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="condition">
+<!--                                    <div>등록 기간 :</div>-->
+                                    <div class="date">
+                                        <input type="text" id="datepicker1"  class="form-control" name="searchBgn" placeholder="시작일 선택"  autocomplete='off'>
+                                        <input type="text" id="datepicker2" class="form-control" name="searchEnd" placeholder="종료일 선택"  autocomplete='off'>
+                                    </div>
+                                </div>
+                                {% if group_id == "-" %}
+                               <div class="condition">
+<!--                                    작업  :-->
+                                    <select id="workGroup" name="workGroup" class="form-control">
+                                        <option value="all">전체</option>
+                                        <option value="gjac">광주 인공지능센터</option>
+                                        <option value="tbit">으뜸정보기술</option>
+                                        <option value="dtw">디투리소스</option>
+                                    </select>
+                                </div>
+                                {% endif %}
+
+                            </div>
+                            <div class="searchSubmit">
+                                <button id="searchBtn" type="submit" class="btn btn-primary btn-lg">검색</button>
+                            </div>
+                        </div>
+                        <input type="hidden" id="group_id" value="{{ group_id }}">
+                    </form>
+
+
+                    <div class="admin-table">
+                        <table class="table table-striped table-hover" id="table-tab-01">
+                            <thead>
+                            <tr>
+                                <th data-number='0'>작업번호</th>
+                                <th data-number='1'>작업종류</th>
+                                <th data-number='10'>작업 파일명</th>
+                                <th data-number='2'>작업자</th>
+                                <th data-number='3'>1차검수자</th>
+                                <th data-number='4'>2차검수자</th>
+                                <th data-number='5'>3차검수자</th>
+                                <!-- <th data-number='3'>작업자 이름</th> -->
+                                <th data-number='11'>클립 수[ 완료/대기 ]</th>
+                                <th data-number='6'>작업상태</th>
+                                <th data-number='9'>등록일</th>
+                                {% if group_id == "-" %}
+                                <th data-number='7'>소속</th>
+                                {% endif %}
+                                <th data-number='8'>작업보기</th>
+                                <th data-number='12'>작업취소</th>
+                            </tr>
+                            </thead>
+                            <tbody class="workViewTable"><!-- class="success" danger info warning active-->
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <input type="hidden" value="" id="postLength">
+                     <div class="paging">
+{#                        {% if all_task_list.has_other_pages %}#}
+{#                          <ul class = "pageTable start">#}
+{##}
+{#                            {% if all_task_list.has_previous %}#}
+{#                              <li><a class="first" href="?page=1">처음</a></li>#}
+{#                              <li><a class="pre" href="?page={{ all_task_list.previous_page_number }}"> < </a></li>#}
+{#                            {% else %}#}
+{#                              <li class="page-item disabled"> <a class="page-link" href="#">처음</a></li>#}
+{#                              <li class="page-item disabled"> <a class="page-link" href="#"> < </a></li>#}
+{#                            {% endif %}#}
+{##}
+{#                            {% for i in page_range %}#}
+{#                              {% if all_task_list.number == i %}#}
+{#                                <li><a class="active num" href="?page={{ i }}">{{ i }} </a></li>#}
+{#                              {% else %}#}
+{#                                <li><a class="num" href="?page={{ i }}">{{ i }}</a></li>#}
+{#                              {% endif %}#}
+{#                            {% endfor %}#}
+{##}
+{#                            {% if all_task_list.has_next %}#}
+{#                               <li><a class="next" href="?page={{ all_task_list.next_page_number }}"> > </a></li>#}
+{#                               <li><a class="last" href="?page={{ all_task_list.paginator.num_pages }}">끝</a></li>#}
+{#                            {% else %}#}
+{#                              <li class="page-item disabled"> <a class="page-link" href="#"> > </a> </li>#}
+{#                              <li class="page-item disabled"> <a class="page-link" href="#">끝</a> </li>#}
+{#                            {%endif %}#}
+{##}
+{#                            </ul>#}
+{#                        {%endif%}#}
+
+                    </div>
+                </div>
+                <!-- 목록이 없을 때 -->
+                <div class="message hidden" >목록이 없습니다.</div>
+        </section>
+    </main>
+    {% endblock %}
+    <div class="modal-background">
+        <div class="modal-inner">
+            <h4>반려 사유를 작성해 주세요.</h4>
+            <textarea></textarea>
+            <div class="button-form">
+                <button type="button" id="fix-submit">확인</button>
+                <button type="button" id="fix-cancel">취소</button>
+            </div>
+        </div>
+    </div>
+    <form style="display:none" id="admin_view" name="admin_view" method="post">
+                 {% csrf_token %}
+        <input name="worker_id" value="">
+        <input name="work_id" value="">
+        <input name="work_type" value="">
+        <input name="work_status" value="">
+    </form>
+    <script>
+
+
+        const modal = document.querySelector('.modal-background')
+        const modal_teatArea = modal.querySelector('textarea')
+        let formEl
+        let textAreaEl
+        let textData
+
+        function fix(e){
+            modal.classList.add('active')
+            modal_teatArea.value = ''
+            modal_teatArea.focus()
+
+            formEl = undefined
+            textAreaEl = undefined
+            textData = ''
+
+            formEl = e.currentTarget.parentNode
+            textAreaEl = formEl.querySelector('textarea')
+        }
+
+        const fixSubmit = document.querySelector('#fix-submit')
+        const fixCancel = document.querySelector('#fix-cancel')
+
+        fixSubmit.addEventListener('click', e => {
+            if(textAreaEl){
+                textAreaEl.value = modal_teatArea.value
+            }
+            modal.classList.remove('active')
+
+            formEl.submit()
+        })
+
+        fixCancel.addEventListener('click', e => {
+            formEl = undefined
+            textAreaEl = undefined
+            textData = ''
+
+            modal.classList.remove('active')
+        })
+
+    </script>
+    <script>
+        $.ajaxSetup({
+            headers: { "X-CSRFToken": '{{csrf_token}}' }
+        });
+    </script>
+    <script src="{%static 'django_app/js/tool/admin_index.js' %}"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+
+      let adminAlert = document.getElementById("adminAlert");
+      var adminMessage = adminAlert? adminAlert.innerHTML : null;
+
+    if(adminMessage){
+      $().ready(function () {
+        Swal.fire({
+          icon: 'success', // Alert 타입
+          title: adminMessage, // Alert 제목
+        })
+
+     })
+    }
+
+    </script>
+
+</body>
+
+
+
+
+

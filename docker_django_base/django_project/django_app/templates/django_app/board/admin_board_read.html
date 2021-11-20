@@ -1,0 +1,36 @@
+{% load static %}
+<input type="hidden" id="board_content" value="{{ board_content.content }}">
+<main class="board-container board-read-page">
+     <form method="post" name="writeForm">
+     {% csrf_token %}
+      <div class="form-group">
+          <h2>{{ board_content.title }}</h2>
+      </div>
+      <div class="form-group" id="board_showContent">
+
+      </div>
+     <div class="option" style="display: flex; justify-content: space-between;">
+         <div style="padding: 8px; background: white; border: 1px solid #e8e8e8;">
+             {% if board_content.option == 'notice' %}
+             공지사항
+             {% endif %}
+             {% if board_content.option == 'normal' %}
+             일반글
+             {% endif %}
+         </div>
+         <div>
+             {% if check %}
+             <a href="board_update?content_id={{ board_content.content_id }}" class="btn btn-primary btn-sm">수정</a>
+             <a href="board_delete?content_id={{ board_content.content_id }}" class="btn btn-primary btn-sm">삭제</a>
+             {% endif %}
+         </div>
+     </div>
+    </form>
+</main>
+<script>
+    (function(){
+        var board_content = document.querySelector('#board_content')
+        var board_showContent = document.querySelector('#board_showContent')
+        board_showContent.innerHTML = `${board_content.value}`
+    }())
+</script>

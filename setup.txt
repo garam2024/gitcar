@@ -1,0 +1,2 @@
+비주얼 스트디오를 설치 한다음
+pip install -r requirements.txt로  라이블러리를 설치한다.

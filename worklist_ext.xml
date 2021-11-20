@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mapper namespace="53project">
+    <select id="selectWorklist">
+        select * from django_app_worklist where 1=1
+        and work_id = #{work_id}
+        [if test="work_id !=''"]
+            and 1=1
+        [/if]
+    </select>
+
+     <select id="selectStandardList">
+        select
+           group_name,
+           work_type,
+           work_name,
+           coalesce(work_div_cnt::integer,0) work_div_cnt,
+           coalesce(work_cnt::integer,0) work_cnt,
+           coalesce(ratio::numeric,0) ratio
+        from(
+           select * from
+              (select
+                 l.group_id,
+                 l.group_name,
+                 l.work_type,
+                 l.work_name,
+                 work_div_cnt,
+                 work_cnt,
+                 trunc( ((work_cnt::numeric / work_div_cnt::numeric) * 100),2) ratio
+              from(
+                 select
+                    w.group_id ,
+                    (select code_nm from django_app_code_mst c where c.code_id= w.group_id) group_name,
+                    w.work_type,
+                    (select code_nm from django_app_code_mst c where c.code_id= w.work_type) work_name,
+                    case
+                       when w.group_id = 'gjac' and w.work_type = 'interface'  then '233500'
+                       when w.group_id = 'gjac' and w.work_type = 'normal'     then '233500'
+                       when w.group_id = 'tbit' and w.work_type = 'interface'  then '200000'
+                       when w.group_id = 'tbit' and w.work_type = 'normal'     then '200000'
+                       when w.group_id = 'dtw'  and w.work_type = 'interface'  then '200000'
+                       when w.group_id = 'dtw'  and w.work_type = 'normal'     then '200000'
+                    end work_div_cnt,
+                    sum(1) work_cnt
+                 from django_app_worklist w, django_app_tasklist t
+                 where 1=1
+                 and w.work_id = t.work_id
+                 [if test="tasklistOne == 'C'"]
+                    and w.work_status ='C'
+                [/if]
+                 [if test="tasklistOne == 'E'"]
+                    and w.work_status ='E'
+                [/if]
+
+              group  by w.group_id, w.work_type
+              ) r right join (
+              select
+                g.code_id group_id,
+                g.code_nm group_name,
+                t.code_id work_type,
+                t.code_nm work_name
+               from
+              (select * from django_app_code_mst where 1=1
+              and code_id in ('gjac','dtw','tbit') ) g ,
+              (select * from django_app_code_mst where 1=1
+              and code_id in ('interface','normal')) t
+              ) l on r.group_id = l.group_id
+              and r.work_type = l.work_type
+           ) a
+        ) b order by b.group_name desc
+    </select>
+
+    <select id="selectManList">
+        select
+           status_code_id,
+           group_code_name,
+           status_name,
+           coalesce(work_cnt::integer,0),
+           to_char(reg_date, 'YYYY-MM-DD HH24:MI:SS') reg_date
+        from(
+           select
+              status_code_id,
+              group_code_name,
+              status_name,
+              work_cnt,
+              reg_date
+           from (
+              (select
+                       w.work_status ,
+                       (select code_nm from django_app_code_mst c where c.code_id= w.work_status) group_name,
+                       w.work_type,
+                       sum(1) work_cnt,
+                       (select reg_date from django_app_workhistory h where h.work_id= work_id and h.history_id = (select max(history_id) from django_app_workhistory i where i.work_id= work_id limit 1 )  ) reg_date
+                    from
+                    (select * from django_app_worklist where 1=1
+                     [if test="worker != ''"]
+                       and (worker_id in (select account_id from django_app_profile where user_name like '%'||#{worker}||'%')
+                       or inspect_id1 in (select account_id from django_app_profile where user_name like '%'||#{worker}||'%'))
+                     [/if]
+                    )    w, django_app_tasklist t
+                    where 1=1
+                    and w.work_id = t.work_id
+                    group  by w.work_status, w.work_type  ) r
+              right join
+              (select
+                      g.code_id status_code_id,
+                     case
+                       when g.code_id = 'C'   then '가공'
+                       when g.code_id = 'E'   then '검수'
+                      end group_code_name,
+                      t.code_id status_id,
+                      t.code_nm status_name
+                  from
+                 (select * from django_app_code_mst where 1=1
+                 and code_id in ('C','E') ) g ,
+                 (select * from django_app_code_mst where 1=1
+                 and code_id in ('interface','normal')) t
+              ) l on r.work_status = l.status_code_id
+              and r.work_type = l.status_id
+            [if test="startday !='no' and endday !='no'"]
+               and to_char(reg_date, 'YYYY-MM-DD') between #{startday} and #{endday}
+            [/if]
+           ) a
+           where 1=1
+        ) b
+    </select>
+
+    <select id="selectTotalList">
+        select
+           work_id,
+           worker_id,
+           inspect_id1,
+           worker_name,
+           inspect_worker_name,
+           work_type,
+           work_name,
+           job_name,
+           video_path,
+           work_status,
+           clip_cnt,
+           group_id,
+           to_char(run_date, 'YYYY-MM-DD HH24:MI:SS') run_date
+        from (
+           select
+              w.work_id,
+              w.worker_id,
+              w.inspect_id1,
+              (select u.user_name from django_app_profile u where u.account_id = w.worker_id) worker_name,
+              (select u.user_name from django_app_profile u where u.account_id = w.inspect_id1) inspect_worker_name,
+              w.work_type,
+              (select code_nm from django_app_code_mst c where c.code_id= w.work_type) work_name,
+              (case
+                 when work_status = 'C' or work_status = 'B'   then '가공'
+                 when work_status = 'E'   then '검수'
+                 end) job_name,
+              split_part(replace(w.video_path,'/media/django_app/action_video/',''),'/',2) video_path,
+              w.work_status,
+              (select count(*) from  django_app_tasklist t where w.work_id = t.work_id ) clip_cnt,
+              w.group_id,
+              (select reg_date from django_app_workhistory h where h.work_id= w.work_id and h.history_id = (select max(history_id) from django_app_workhistory i where i.work_id= w.work_id limit 1 )  ) run_date
+           from django_app_worklist w
+           where 1=1
+           and w.work_status in ('C','E','B')
+            [if test="worker != ''"]
+              and (worker_id in (select account_id from django_app_profile where user_name like '%'||#{worker}||'%')
+              or inspect_id1 in (select account_id from django_app_profile where user_name like '%'||#{worker}||'%'))
+            [/if]
+        ) a where 1=1
+            [if test="startday !='' and endday !=''"]
+            and to_char(run_date, 'YYYY-MM-DD') between #{startday} and #{endday}
+            [/if]
+
+    </select>
+
+    <select id="selectKeyid">
+        select currval('django_app_worklist_task_num_seq') as workLST
+    </select>
+
+    <insert id="workinsert">
+        insert into django_app_tasklist (
+            task_id,
+            associated_video_path,
+            task_data,
+            work_id,
+            end_time,
+            start_time,
+            reg_id,
+            reg_date,
+            reject_status,
+            group_id
+        )values(
+            #{task_id},
+            #{associated_video_path},
+            #{task_data},
+            #{work_id},
+            #{end_time},
+            #{start_time},
+            #{reg_id},
+            now(),
+            #{reject_status},
+            #{group_id}
+        )
+    </insert>
+
+    <select id="selectTasklist">
+        select
+            *,
+            (select video_path from django_app_worklist where work_id = t.work_id) video_path
+        from django_app_tasklist t where handpose_job_yn ='N' and work_id='15'
+        order by work_id
+    </select>
+
+    <update id="updateTaskData">
+        update django_app_tasklist set
+            task_data = #{task_data}
+        where work_id = #{work_id}
+          and task_id = #{task_id}
+    </update>
+
+    <update id="updateTaskPro">
+        update django_app_tasklist set
+            handpose_job_yn = 'Y'
+        where work_id = #{work_id}
+          and task_id = #{task_id}
+    </update>
+
+</mapper>
+

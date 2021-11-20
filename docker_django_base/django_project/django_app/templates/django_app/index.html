@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>로그인--{{serverNameTitle}}</title>
+    <link rel="icon" href="{% static 'django_app/img/logo/gjac_favicon.ico' %}">
+    <link href="{% static 'django_app/css/login_css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'django_app/css/login_css/font-awesome.css' %}" rel="stylesheet">
+
+    <link href="{% static 'django_app/css/login_css/animate.css' %}" rel="stylesheet">
+    <link href="{% static 'django_app/css/login_css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'django_app/css/color.css' %}" rel="stylesheet">
+
+    <script src="{% static 'django_app/js/tool/jquery-3.1.1.min.js' %}"></script>
+ 
+
+   
+
+</head>
+
+<body id="indexBody" class="gray-bg">
+
+
+
+  {% for message in messages %}
+  <div id="indexAlert" style ="display:none;" >{{ message.tags }}</div>
+  <div id="logoutAlert" style ="display:none;">{{ message }}</div>
+ 
+{% endfor %}
+<!--  -->
+
+
+   
+
+    <div class="middle-box text-center loginscreen animated fadeInDown">
+        <div>
+            <div class="logoimg">
+
+              <div><a class="navbar-brand" href="main"><img alt="AI cloud"
+                src="{% static 'django_app/img/logo/gjac_logo.png' %}"></a></div>
+
+            </div>
+
+            <form class="m-t" id = "login-box" action = "{% url 'main' %}" method="post">
+                {% csrf_token %}
+                <div class="labelling">
+                    차량내외부 상황인식 데이터 라벨링 작업---[{{serverNameTitle}}]
+                </div>
+
+                <div class="form-group">
+                    <input type="text" id = 'login_id' name = 'login_id' class="form-control" placeholder="ID" autocomplete = "off">
+                </div>
+
+                <div class="form-group">
+                    <input type="password" id = 'login_pw' name = 'login_pw' class="form-control" placeholder="Password" autocomplete = "off">
+                </div>
+
+                <input type="button" value = "로그인" class="btn btn-primary block full-width m-b" id='login_submit'>
+            
+            </form>
+
+            <a href = "{% url 'register' %}"><button value = "회원가입" class="btn btn-primary block full-width m-b" id='regist_page_change'>회원가입</button></a>
+
+
+        </div>
+    </div>
+
+
+
+    <!-- Mainly scripts -->
+    
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <!-- <script src="{% static 'django_app/js/tool/bootstrap.min.js' %}"></script> -->
+    <script src="{% static 'django_app/js/tool/login_check.js' %}"></script>
+    <script src="{% static 'django_app/js/tool/logout.js' %}"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+
+
+</body>
+
+</html>
+

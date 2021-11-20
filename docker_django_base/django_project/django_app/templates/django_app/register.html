@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입</title>
+
+    <script src="{% static 'django_app/js/tool/jquery-3.1.1.min.js' %}"></script>
+    <link href="{% static 'django_app/css/login_css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'django_app/css/login_css/font-awesome.css' %}" rel="stylesheet">
+    <link rel="icon" href="{% static 'django_app/img/logo/gjac_favicon.ico' %}">
+    <link href="{% static 'django_app/css/login_css/animate.css' %}" rel="stylesheet">
+    <link href="{% static 'django_app/css/login_css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'django_app/css/register_css/register.css' %}" rel="stylesheet">
+    <link href="{% static 'django_app/css/color.css' %}" rel="stylesheet">
+   
+</head>
+
+<body class="registerBody">
+
+    <div class="sub_wrap">
+      <div class="title_wrap">
+      <div class="logo_wrap"><a class="navbar-brand" href="main"><img alt="AI cloud"
+        src="{% static 'django_app/img/logo/gjac_logo.png' %}"></a></div>
+      <div class="joinWrap"><h4 class="cStyle">회원가입</h4></div></div>
+     
+        
+    
+        <div class="signup_form">
+            <form action="" id="register_doForm" method="post" name="join">{% csrf_token %}
+                
+
+                <div>
+                    <label for="nname">이름</label>
+                    <input type="text" name="nname" id="nname" placeholder="이름" autocomplete="off" class="disabled" required>
+                </div>
+
+                <div>
+                    <label for="nid">아이디</label>
+                    <div class="idcheck"><input type="text" name="nid" id="nid" placeholder="아이디" autocomplete="off" value={{nid}}>
+                      <input type="button" id="id_chk" value="중복확인"class="green chk_btn"  onclick="duplicte_submit2()">
+                      <input type="hidden" value=""></div>
+                    
+                </div>
+    
+                <div>
+                    <label for="npw">비밀번호</label>
+                    <input type="password" name="npw" id="npw" placeholder="영문, 특수문자, 숫자를 포함한 8자리 비밀번호 작성" autocomplete="off" required>
+                </div>
+    
+                <div>
+                    <label for="npwchk">비밀번호 확인</label>
+                    <input type="password" name="npwchk" id="npwchk" placeholder="비밀번호 확인" autocomplete="off" required>
+                </div>
+
+                <div>
+                    <label for="ngroup">소속</label>
+                    <select id="ngroup" name="selectBox">
+                        <option value="선택 없음" disabled selected hidden>소속을 선택하세요.</option>
+                        <option value="tbit">으뜸정보기술</option>
+                        <option value="dtw">디투리소스</option>
+                        <option value="gjac">광주인공지능센터</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="nphone">휴대전화</label>
+                    <input type="text" name="nphone" id="nphone" placeholder="-없이 입력" autocomplete="off" class="disabled" required>
+                </div>
+    
+                <div>
+                    <label for="nemail">이메일</label>
+                    <input type="email" name="nemail" id="nemail" placeholder="이메일" autocomplete="off" required>
+                </div>
+    
+                <div class="regist_btn">
+                    <input type="button" id="register_do" value="가입하기" class="btn" onclick="register_submit()">
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- Ajax 사용 시 CSRF Token 추가 기능 -->
+    <script>
+        $.ajaxSetup({
+            headers: { "X-CSRFToken": '{{csrf_token}}' }
+        });
+    </script>
+
+    <script src="{% static 'django_app/js/tool/join_check.js' %}"></script>
+
+
+    
+</body>
+</html>

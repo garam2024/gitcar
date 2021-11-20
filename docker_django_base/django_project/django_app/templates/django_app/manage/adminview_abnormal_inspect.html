@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이상 행동</title>
+    <link rel="icon" href="{% static 'django_app/img/logo/gjac_favicon.ico' %}">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <!-- Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"><!-- css -->
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> <!-- 테마 -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- 자바스크립트 -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <!-- stylesheet -->
+    <link rel="stylesheet" href="{%static 'django_app/car_abnormal/css/style.css' %}"/>
+    <link rel="stylesheet" href="{%static 'django_app/car_abnormal/css/ribbon.css' %}"/>
+
+    <!-- wavesurfer -->
+    <script src="https://unpkg.com/wavesurfer.js/dist/wavesurfer.js"></script>
+    <script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.timeline.js"></script> <!-- timeline plugin -->
+    <script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.regions.js"></script> <!-- regions plugin -->
+    <script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.minimap.js"></script> <!-- minimap plugin -->
+    <script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.cursor.js"></script> <!-- cursor plugin -->
+    <script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.markers.js"></script> <!-- markers plugin -->
+    <link rel="screenshot" itemprop="screenshot"
+          href="https://katspaugh.github.io/wavesurfer.js/example/screenshot.png"/> <!-- example img -->
+
+    <!-- fabric -->
+    <script>
+        (function () {
+            var fabricUrl = "{%static 'django_app/car_abnormal/js/fabric.js' %}";
+            if (document.location.search.indexOf('load_fabric_from=') > -1) {
+                var match = document.location.search.match(/load_fabric_from=([^&])/);
+                if (match && match[1]) {
+                    fabricUrl = match[1];
+                }
+            }
+            document.write('<script src="' + fabricUrl + '"><\/script>');
+        })();
+    </script>
+    <script>
+        var group_id = '{{task_info.group_id}}';
+        var work_id = '{{task_info.work_id}}';
+        var work_status = '{{task_info.work_status}}';
+        var all = '{{ task_info }}';
+        var memo = '{{ task_info.memo }}';
+        let filePath = '{{task_info.video_path}}';
+        var fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
+        function downLoadFile() {
+            var a = $("<a>")
+                .attr("href", filePath)
+                .attr("download", fileName)
+                .appendTo("body");
+            a[0].click();
+            a.remove();
+        };
+    </script>
+<body itemscope itemtype="http://schema.org/WebApplication">
+<input type="hidden" id="tasknumber" value="{{task_info.work_id}}">
+<input type="hidden" id="groupId" value="{{task_info.group_id}}">
+
+<div id="demo">
+    <div id="clipList">
+        <div>
+            <h2>세트 영역</h2>
+            <div id="sets">
+            </div>
+        </div>
+        <div>
+            <h2>클립 영역</h2>
+            <div id="clips">
+            </div>
+        </div>
+        <div></div>
+    </div>
+    <section class="editing-area">
+        <div class="editing-area-nav">
+            <h2>편집 영역</h2>
+            <div id="pageBtnArea">
+            </div>
+        </div>
+        <div>
+            <div id="canvas-area" class="disable">
+                <!-- This video comes from NASA Video Gallery https://www.youtube.com/watch?v=Zg7i4q_EX9E -->
+                <video id="orgVideo" style="display:block; margin: 0 auto; position: absolute;" src="" type="video/mpeg"></video>
+                <canvas id="tmpCanvas" style="display: none;"></canvas>
+                <canvas id="canvas" style="display:block; position: absolute; z-index:-1"></canvas>
+                <canvas id="c" style="position: relative; z-index: 20;"></canvas>
+            </div>
+            <div>
+                <p id="subtitle" class="text-center text-info"></p>
+                <div class="wavesufer-area">
+                    <div id="wave-timeline"></div>
+                    <div id="waveform" style="pointer-events: none;">
+                        <!-- Here be the waveform -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="video-tools-inspect">
+            <button id="playBtn" data-action="play" class="btn btn-default btn-block">
+                <span id="play">
+                    <i class="glyphicon glyphicon-play"></i>
+                    play
+                </span>
+                <span id="pause" style="display: none">
+                    <i class="glyphicon glyphicon-pause"></i>
+                    pause
+                </span>
+            </button>
+            <button id="downloadBtn" class="btn btn-default btn-block" onclick="downLoadFile()">
+                <i class="glyphicon glyphicon-save"></i>
+                <span> 다운로드</span>
+            </button>
+            <button id="fileLoad" class="btn btn-default btn-block fileLoad" title="load file">
+                <i class="glyphicon glyphicon-open"></i>
+                <span> 업로드</span>
+            </button>
+            <input id="file" type="file" accept="video/mp4,video/mkv, video/x-m4v,video/*" class="hidden">
+            <!-- <button id="exportBtn" class="btn btn-info btn-block" data-action="export" title="Export annotations to JSON" disabled>
+                <i class="glyphicon glyphicon-file"></i>
+                <span>Export</span>
+            </button> -->
+        </div>
+    </section>
+
+
+    <div id="labelResult">
+        <div>
+            <h2>클립 정보</h2>
+            <div id="clipArea">
+            </div>
+        </div>
+        <div>
+            <h2>탑승자 정보</h2>
+            <div id= "occupantArea">
+            </div>
+        </div>
+        <div>
+            <h2>라벨링 영역</h2>
+            <div id="labelingArea">
+                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                </div>
+            </div>
+        </div>
+        <div></div>
+{#        <div class="work-complete">#}
+<!--            <button id="saveBtn" class="btn btn-success btn-block" onclick="DataToString()" disabled>-->
+<!--                <i class="glyphicon glyphicon-saved"></i>-->
+<!--                <span> 작업 저장</span>-->
+<!--            </button>-->
+<!--            <button id="workComplete" class="btn btn-success btn-block" onclick="" disabled>-->
+<!--                <i class="glyphicon glyphicon-circle-arrow-right"></i>-->
+<!--                <span> 작업 완료</span>-->
+<!--            </button>-->
+{#        </div>#}
+    </div>
+</div>
+<div class="reject-area">
+    <div class ="pre-reject-memo" >
+        <h4><b>이전 반려사유</b></h4>
+        <div>
+            <textarea id="preRestoration" name="preRestoration" rows="8" cols="80"
+                          placeholder="이전 반려 사유가 없습니다." disabled></textarea>
+        </div>
+    </div>
+    <div class="reject-form">
+        <form name="restorationResult">
+            <h4><b>검수결과 메모</b></h4>
+            <div>
+                <div style="display: inline-block; vertical-align: middle;">
+                    <h5>클립 번호 : </h5>
+                </div>
+                <div style="display: inline-block; vertical-align: middle;">
+                    <h5 id="clipNum"></h5>
+                </div>
+                <div style="display: inline-block; float: right;">
+                    <button type="button" class="btn btn-success" id="addRejection" onclick="addResult()"
+                            style="height:40px; vertical-align: middle;">한 줄 추가
+                    </button>
+                </div>
+                <div style="float: right;">
+                     &nbsp;&nbsp;
+                </div>
+                <div style="display: inline-block; float: right;">
+                    <select id="rejection" name="rejection" class="form-control"
+                            style="width:600px; height:40px; vertical-align: middle;">
+                        <option value='인물전신영역 오태깅 : 인물영역이 아닌 부분에 인물 영역으로 라벨링'>인물전신영역 오태깅 : 인물영역이 아닌 부분에 인물 영역으로 라벨링
+                        </option>
+                        <option value='인물전신영역 과태깅 : 보이지 않는 부분까지 추측하여 과도하게 라벨링'>인물전신영역 과태깅 : 보이지 않는 부분까지 추측하여 과도하게 라벨링
+                        </option>
+                        <option value='인물전신영역 과태깅 : 태깅 대상이 아닌 객체에 대한 태깅'>인물전신영역 과태깅 : 태깅 대상이 아닌 객체에 대한 태깅</option>
+                        <option value='인물전신영역 미태깅 : 타 객체와 겹치는 부분이 많다는 이유로 명확히 드러난 객체를 라벨링 하지 않음'>인물전신영역 미태깅 : 타 객체와 겹치는
+                            부분이 많다는 이유로 명확히 드러난 객체를 라벨링 하지 않음
+                        </option>
+                        <option value='얼굴영역 오태깅 : 눈, 코, 입만 들어가는 형태로 타이트한 라벨링'>얼굴영역 오태깅 : 눈, 코, 입만 들어가는 형태로 타이트한 라벨링
+                        </option>
+                        <option value='얼굴영역 과태깅 : 태깅 대상이 아닌 객체에 대한 태깅'>얼굴영역 과태깅 : 태깅 대상이 아닌 객체에 대한 태깅</option>
+                        <option value='얼굴영역 과태깅 : 20*20 픽셀 이하의 작은 객체를 라벨링'>얼굴영역 과태깅 : 20*20 픽셀 이하의 작은 객체를 라벨링</option>
+                        <option value='얼굴영역 미태깅 : 얼굴 영역을 분명하게 추정할 수 있지만 라벨링 하지 않음'>얼굴영역 미태깅 : 얼굴 영역을 분명하게 추정할 수 있지만 라벨링
+                            하지 않음
+                        </option>
+                        <option value='감정라벨링 오태깅 : 5개의 감정이 아닌 다른 감정을 입력'>감정라벨링 오태깅 : 5개의 감정이 아닌 다른 감정을 입력</option>
+                        <option value='감정라벨링 과태깅 : 태깅 대상이 아닌 객체에 대한 태깅'>감정라벨링 과태깅 : 태깅 대상이 아닌 객체에 대한 태깅</option>
+                        <option value='감정라벨링 미태깅 : 바운딩 박스가 라벨링 된 얼굴에 표정을 입력하지 않음'>감정라벨링 미태깅 : 바운딩 박스가 라벨링 된 얼굴에 표정을 입력하지
+                            않음
+                        </option>
+                        <option value='이상행동라벨링 오태깅 : 명확하게 어떤 이벤트인지 확인 가능하지만 다른 행동으로 태깅'>이상행동라벨링 오태깅 : 명확하게 어떤 이벤트인지 확인
+                            가능하지만 다른 행동으로 태깅
+                        </option>
+                        <option value='이상행동라벨링 과태깅 : 이상행동 7종에 해당하지 않는 라벨링을 한 경우(동승자 하차, 주차 등)'>이상행동라벨링 과태깅 : 이상행동 7종에
+                            해당하지 않는 라벨링을 한 경우(동승자 하차, 주차 등)
+                        </option>
+                        <option value='이상행동라벨링 미태깅 : 명확하게 어떤 이벤트인지 확인 가능하지만 태깅하지 않음'>이상행동라벨링 미태깅 : 명확하게 어떤 이벤트인지 확인
+                            가능하지만 태깅하지 않음
+                        </option>
+                    </select>
+                </div>&nbsp;&nbsp;
+
+
+            </div>
+            <br/>
+            <div>
+                <textarea id="restoration" name="restoration" rows="4" cols="110"
+                          placeholder="반려 사유를 작성해주세요."></textarea>
+            </div>
+            <div>
+                <button type="button" id="inspectBtn" class="btn btn-info" style="width:49.5%;" onclick="rejectClip()">
+                    <i class="glyphicon glyphicon-saved">&nbsp;</i><span>클립 반려</span>
+                </button>
+                <button type="submit" id="restorationBtn" class="btn btn-primary" style="width:49.5%;">
+                    <i class="glyphicon glyphicon-save">&nbsp;</i><span>최종 반려</span>
+                </button>
+            </div>
+        </form>
+    </div>
+    <div></div>
+</div>
+
+<input type="hidden" id="work_id" value="{{task_info.work_id}}">
+<input type="hidden" id="work_type" value="{{task_info.work_type}}">
+<input type="hidden" id="work_status" value="{{task_info.work_status}}">
+
+<script>
+
+        window.onload = function(){
+            document.getElementById("inspectBtn").disabled = true
+            document.getElementById("restorationBtn").disabled = true
+            document.getElementById("addRejection").disabled = true
+        }
+</script>
+<script>
+            function addResult() {
+                 // 현재 클립 번호(0부터 시작한다.)
+                var nowClipNum = document.querySelector("#"+currentRegionId).task_id;
+                if (nowClipNum == undefined){
+                    alert('클립을 먼저 선택해주세요.')
+                    return
+                }
+                let clipNum = nowClipNum.toString(10) // decimal string
+                let rejectContent = $('#rejection option:selected').val();
+
+                let selectedVal = "클립 " + clipNum + "번 - " + rejectContent + "/"
+                let textareaContent = document.getElementById("restoration").value;
+                if (textareaContent === '') {
+                    document.getElementById("restoration").value = rejectContent;
+                } else {
+                    document.getElementById("restoration").value = textareaContent + "\n" + rejectContent;
+                }
+            }
+
+            function rejectClip(){
+                if(confirm("현재 클립에 대해 반려하시겠습니까?")){
+                     var nowClipNum = document.querySelector("#"+currentRegionId).task_id;
+                    let rejectContent = document.getElementById("restoration").value;
+                    let reject_memo = "";
+                    if(rejectContent.length != 0){
+                        rejectContent = replaceAll(rejectContent,"\n",",");
+                        reject_memo = replaceAll(rejectContent,"'","''");
+                        rejectMap.set(nowClipNum, reject_memo);
+                    }else{
+                        if(rejectMap.get(nowClipNum) != undefined)
+                            rejectMap.delete(nowClipNum);
+                    }
+                    let param = {
+                        work_id : work_id,
+                        task_id : nowClipNum,
+                        reject_memo : reject_memo
+                    }
+
+                    addResultAjax(param);
+                    wavesurfer.regions.list[currentRegionId].workStatus = '반려';
+                    clipStatusSet();
+                    setsStatusAll(nowSetPage);
+                }
+            }
+
+            function addResultAjax(param) {
+                $.ajax({
+                    url: "adminview/admin_inspect",
+                    type: "POST",
+                    data: JSON.stringify(param),
+                    success: function () {
+                    },
+                    error: function () {
+                        alert("저장 실패")
+                    }
+                })
+            }
+
+
+            let rstnForm = document.forms.restorationResult;
+
+            rstnForm.onsubmit = function (e) {
+
+                e.preventDefault();
+
+                if(confirm("최종 반려 하시겠습니까?")){
+                    var memoTot = "";
+                    for (var tmpKey of rejectMap){
+                        memoTot += "클립" + tmpKey[0] + "번 - " + tmpKey[1] + "/";
+                    }
+                    if(memoTot.length ==0){
+                        alert("최종 반려 내용이 비어있습니다.\n 반려할 내용이 없으면 페이지에서 나가주시길 바랍니다.")
+                        return
+                    }
+
+                    var param = {
+                        work_id:  "{{task_info.work_id}}",
+                        group: document.getElementById("groupId").value,
+                        memo: memoTot,
+                        work_status : "{{task_info.work_status}}",
+                        work_type : "{{task_info.work_type}}",
+                    }
+
+                    $.ajax({
+                        url: "admin_complete",
+                        type: "POST",
+                        data: JSON.stringify(param),
+                        success: function () {
+                            window.open('','_self').close();
+                        },
+                        error: function () {
+                            alert("저장 실패")
+                        }
+                    })
+                }
+            }
+        </script>
+
+
+<!-- js -->
+<!--<script src="{%static 'django_app/car_abnormal/js/trivia.js' %}"></script>-->
+
+<script src="{%static 'django_app/car_abnormal/js/inspectLabeling.js' %}"></script>
+<script src="{%static 'django_app/car_abnormal/js/occupant.js' %}"></script>
+<script src="{%static 'django_app/car_abnormal/js/inspection.js' %}"></script>
+<script src="{%static 'django_app/car_abnormal/js/loadWave.js' %}"></script>
+
+
+<!-- 푸터 -->
+{% include "django_app/include/footer.html" %}
+
+<script>
+    $.ajaxSetup({
+        headers: {"X-CSRFToken": '{{csrf_token}}'}
+    });
+</script>
+</body>
+
+</html>

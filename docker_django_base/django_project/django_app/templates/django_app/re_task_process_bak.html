@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="{%static 'django_app/img/logo/gjac_favicon.ico' %}">
+  <link rel="stylesheet" href="{%static 'django_app/css/commons.css' %}">
+  <link rel="stylesheet" href="../../static/django_app/css/style.css">
+
+  <link href="{% static 'django_app/css/login_css/font-awesome.css' %}" rel="stylesheet">
+  <link rel="stylesheet" href="{%static 'django_app/css/act.css' %}">
+  <script src="../../static/django_app/js/tool/jquery-3.1.0.js"></script>
+  <script>
+    $.ajaxSetup({
+      headers: { "X-CSRFToken": '{{csrf_token}}' }
+    });
+  </script>
+</head>
+
+<body>
+    <header class="header">
+      <div><a href="/main"><img class="contain" alt="AI cloud" src="/static/django_app/img/logo/gjac_logo.png"></a>
+      </div>
+      <div>이상행동 라벨링</div>
+    </header>
+
+    <div class="container">
+      <div class="video-form">
+          <div>
+              <div>
+                  <video src="../../../media/django_app/action_video/test_2.mp4" preload="auto">
+                    <source src="../../../media/django_app/test_video/my_video.mp4" type="video/mp4">
+                  </video>
+                  <canvas id="bounding-canvas"></canvas>
+              </div>
+              <div class="wavesurfer-container">
+                  <div id="waveform-timeline"></div>
+                  <div id="waveform"></div>
+              </div>
+              <div class="video-footer">
+                  <div class="video-tool">
+                      <div class="play-pause">
+                          <ion-icon name="play-circle-outline" id="video-play"></ion-icon>
+                          <ion-icon name="pause-circle-outline" id="video-pause"></ion-icon>
+                      </div>
+                      <div class="sound">
+
+                      </div>
+                  </div>
+                  <div class="timer">
+                      <div id="progressTime">0:00 </div>&nbsp~&nbsp
+                      <div id="endTime"> </div>
+                  </div>
+              </div>
+              <div class="blending-tool">
+                  혼합 툴 위치
+                  <button type="button" id="deleteRegion">region 선택 삭제</button>
+                  <button type="button" id="selectedLabelDelete">label 선택 삭제</button>
+                  <button type="button" id="selectedRegionRelese">region 선택 해제</button>
+              </div>
+          </div>
+          <div class="tabs">
+            <input id="all" type="radio" name="tab_item" checked>
+            <label class="tab_item" for="all">사람</label>
+            <input id="programming" type="radio" name="tab_item">
+            <label class="tab_item" for="programming">행동</label>
+            <input id="design" type="radio" name="tab_item">
+            <label class="tab_item" for="design">감정</label>
+            <div class="tab_content" id="all_content">
+              <div class="flexcol">
+                <div class="flexrow humantab">
+                  <label>전작업불러오기
+                    <input type="button">
+                  </label>
+                  <label>인원추가하기
+                    <input  class="add" type="button" value="인원추가하기" >
+                  </label>
+                </div>
+                <div class="humaninfo">
+               
+         
+                  </div>
+                </div>
+        
+           
+              </div>
+              <div class="tab_content" id="programming_content">
+                <div class="human_container"></div>
+                <div class="flexrow actbtn">
+                  
+                  <ul>
+                    <li>졸음운전</li>
+                    <li>고개숙이다/흔들다</li>
+                    <li>박수치다</li>
+                    <li>뺨을때리다</li>
+                    <li>목을만지다</li>
+                    <li>어깨를두드리다</li>
+          
+                  </ul>
+                  <ul>
+                    <li>음주운전</li>
+                    <li>불안정한동작</li>
+                    <li>핸들을흔들다</li>
+                    <li>~를마시다</li>
+                    <li>창문을열다</li>
+          
+                  </ul>
+                  <ul>
+                    <li>물건찾기</li>
+                    <li>몸을돌리다</li>
+                    <li>손을뻗다</li>
+                    <li>~허리굽히다</li>
+                    <li>줍다</li>
+          
+                  </ul>
+                  <ul>
+                    <li>통화</li>
+                    <li>손을뻗다</li>
+                    <li>고개를돌리다</li>
+                    <li>옆으로기대다</li>
+                    <li>~를손에쥐다</li>
+                    <li>말하다</li>
+          
+                  </ul>
+                  <ul>
+                    <li>휴대폰조작</li>
+                    <li>손을뻗다</li>
+                    <li>고개를돌리다</li>
+                    <li>~를손에쥐다</li>
+                    <li>힐끗거리다</li>
+          
+                  </ul>
+                  <ul>
+                    <li>차량제어</li>
+                    <li>손을뻗다</li>
+                    <li>고개를돌리다</li>
+                    <li>힐끗거리다</li>
+                    <li>기기사용</li>
+          
+                  </ul>
+                  <ul>
+                    <li>운전자폭행</li>
+                    <li>손을뻗다</li>
+                    <li>발을올리다</li>
+                    <li>일어서다</li>
+                    <li>휘두르다</li>
+                    <li>말하다</li>
+                    <li>하차하다</li>
+                  </ul>
+                </div>
+                <label class="save">저장
+                  <input type="button" name="save">
+                </label>
+                <label class="cansle">취소
+                  <input type="button" name="cansle">
+                </label>
+             
+          
+              </div>
+              <div class="tab_content" id="design_content">
+                <div class="flexrow">
+                  <ul>
+                    <li>기쁨</li>
+                    <li>광대상승</li>
+                    <li>입꼬리상승</li>
+                  </ul>
+                  <ul>
+                    <li>분노</li>
+                    <li>눈썹하강</li>
+                    <li>미간주름</li>
+                    <li>째려보다</li>
+                    <li>입을앙다물다</li>
+                  </ul>
+                  <ul>
+                    <li>놀람</li>
+                    <li>안쪽눈썹상승</li>
+                    <li>바깥쪽눈썹상승</li>
+                    <li>이마상승</li>
+                    <li>눈확대</li>
+                    <li>입이벌어지다</li>
+                  </ul>
+                  <ul>
+                    <li>슬픔</li>
+                    <li>안쪽눈썹상승</li>
+                    <li>눈썹하강</li>
+                    <li>입꼬리하강</li>
+                    <li>눈물이맺히다</li>
+                  </ul>
+                  <ul>
+                    <li>중립</li>
+                    <li>위의 4가지 감정을 제외한 나머지 감정</li>
+                  </ul>
+                </div>
+                <label class="save">저장
+                  <input type="button" name="save">
+                </label>
+                <label class="cansle">취소
+                  <input type="button" name="cansle">
+                </label>
+             
+              </div>
+              
+            </div>
+            <div>
+              <button type="button" id="intermediateStorage">임시저장</button>
+          <button type="button" id="jsonDataToServer">저장하기</button>
+        </div>
+      </div>
+      <div class="crop-list-container">
+          <h2>구간 분할 개수- <span id="divideLength">0</span>개</h2>
+          <div class="crop-list">
+              
+          </div>
+      </div>
+      
+      
+    </div>
+ 
+    
+    <script src="../../static/django_app/js/tool/fabric.min.js"></script>
+    <!-- ionicicons -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+    <!-- wavesurfer.js -->
+    <script src="https://unpkg.com/wavesurfer.js/dist/wavesurfer.js"></script>
+    
+    <!-- plugins -->
+    <script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.regions.js"></script>
+    <script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.minimap.js"></script>
+    <script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.timeline.js"></script>
+    <script src="../../static/django_app/js/tool/store.js"></script>
+    <script src="../../static/django_app/js/tool/util.js"></script>
+    <script src="../../static/django_app/js/tool/videoWave.js"></script>
+    <script src="../../static/django_app/js/tool/boundingBox.js"></script>
+    <script src="../../static/django_app/js/tool/keyevent.js"></script>
+    
+    <div class="footerGac col-md-10 col-md-offset-1 col-sm-12" style="user-select: auto;">
+      <ul class="list-icons" style="user-select: auto;">
+        <li style="user-select: auto;">(주)광주인공지능센터 사업장 소재지: 광주광역시 동구 동계천로 150, 510호 (동명동, 아이플렉스광주)[61436]</li>
+        <li style="user-select: auto;"><span style="user-select: auto;">고객센터: 062.223.1335</span> <span style="user-select: auto;">팩스: 062.223.1336</span> <span style="user-select: auto;">이메일: gjaicenter@gmail.com</span> <span style="user-select: auto;">대표이사:이경일</span></li>
+        
+        
+        <li style="user-select: auto;">Copyright ©  <a target="_blank" href="http://www.saltlux.com/" style="user-select: auto;">㈜광주인공지능센터</a>. All rights reserved.</li>
+      </ul>
+    </div>
+
+  <script src=" {% static 'django_app/js/tool/submit.js'%}"></script>
+  <script src=" {% static 'django_app/js/tool/actbtn.js'%}"></script>
+</body>
+
+</html>

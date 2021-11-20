@@ -1,0 +1,31 @@
+{% extends 'django_app/base.html' %}
+{% load static %}
+{% block contents %}
+   <input type="hidden" id="urlData" value="{{ url }}">
+   <div class="workMain">
+        <div class="titleMargin">
+            <div class="workMain_2">
+            {% if pageInfo == 'list' %}
+                {% include "django_app/board/admin_board_list.html" %}
+            {% endif %}
+            {% if pageInfo == 'read' %}
+                {% include "django_app/board/admin_board_read.html" %}
+            {% endif %}
+            {% if pageInfo == 'create' %}
+                {% include "django_app/board/admin_board_write.html" %}
+            {% endif %}
+            {% if pageInfo == 'update' %}
+                {% include "django_app/board/admin_board_update.html" %}
+            {% endif %}
+            </div>
+        </div>
+   </div>
+    <script>
+        $.ajaxSetup({
+            headers: {
+                "X-CSRFToken": "{{csrf_token}}"
+            }
+        })
+    </script>
+    <script src="{% static 'django_app/js/tool/boardPaging.js' %}"></script>
+{% endblock %}

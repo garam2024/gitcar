@@ -1,0 +1,249 @@
+{% extends 'django_app/manage/admin_base.html' %}
+{% load static %}
+{% block contents %}
+
+       <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+      xmlns="http://www.w3.org/1999/html">
+       <!-- jQuery library -->
+       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+       <!-- Latest compiled JavaScript -->
+       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+       <!-- lodash -->
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+      
+       
+
+       <link rel="stylesheet" href="{%static 'django_app/css/commons.css' %}">
+       <link rel="stylesheet" href="{%static 'django_app/css/admin_index.css' %}">
+
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script>
+            $(function() {
+                $("#datepicker1,#datepicker2").datepicker({
+                     dateFormat: 'yy-mm-dd'
+                });
+            });
+        </script>
+        <!-- Sheet JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
+        <!--FileSaver savaAs 이용 -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
+
+
+
+<body>
+
+  {% for message in messages %}
+
+
+  <div id="adminAlert" style="display:none;">{{ message }}</div>
+
+{% endfor %}
+
+    <main class="admin-page">
+        <section>
+            <div class="table">
+                <h3>가공/검수</h3>
+                <div class="tab-table">
+                    <form action = "{% url 'man' %}" method="POST" name="searchForm_02">
+                        {% csrf_token %}
+                        <div class="searchCondition" name="searchCondition">
+                            <div class="search" id="search02">
+                                <div class="condition">
+<!--                                    작업자 이름 :-->
+                                    <input id="workerNm" class="form-control" name="workerNm"  type="text" placeholder="작업자명" value="{{workName}}" autocomplete='off'>
+                                </div>
+
+                                <div class="condition">
+<!--                                    <div>등록 기간 :</div>-->
+                                    <div class="date">
+                                        <input type="text" id="datepicker1"  class="form-control" name="startday" placeholder="조회시작날짜" value="{{startday}}" autocomplete='off'>
+                                        <input type="text" id="datepicker2" class="form-control" name="endday" placeholder="조회마감날짜" value="{{endday}}" autocomplete='off'>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="searchSubmit">
+                                <button type="submit" class="btn btn-primary btn-lg">검색</button>
+                                <button type="button"  id="excel_save">엑셀 저장</button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+         <div id="tableData">
+            <table class="first-table">
+                {% for work in worker_list %}
+                <tr>
+                    <td>{{work.group_code_name}}</td>
+                    <td>{{work.status_name}}</td>
+                    <td>{{work.coalesce}} 건</td>
+                </tr>
+                  {% endfor %}
+            </table>
+             <div class="admin-table">
+                 <table class="table table-striped table-hover" id="table-tab-02">
+                     <thead>
+                     <tr>
+                         <th data-number='5'>작업 번호</th>
+                         <th data-number='0'>작업자명</th>
+                         <th data-number='1'>작업명</th>
+                         <th data-number='2'>작업분류</th>
+                         <th data-number='3'>작업파일명</th>
+                         <th data-number='4'>클립갯수</th>
+                     </tr>
+                     </thead>
+                   <tbody class="workViewTable">
+                            {% if total_list|length == 0 %}
+                            <tr>
+                                <td colspan="6">검색 결과가 없습니다. </td>
+                            </tr>
+                            {% else %}
+                            {% for item in total_list %}
+                            <tr>
+                                <td>{{item.work_id}}</td>
+                                <td>{{item.worker_name}}</td>
+                                <td>{{item.job_name}}</td>
+                                <td>{{item.work_name}}</td>
+                                <td>{{item.video_path}}</td>
+                                <td>{{item.clip_cnt}}</td>
+                                <td>{{item.reg_date|date:"Y-m-d"}}</td>
+                            </tr>
+                            {% endfor %}
+                            {% endif %}
+                    </tbody>
+                 </table>
+            </div>
+         </div>
+        </section>
+
+    </main>
+  {% endblock %}
+
+
+    <script>
+
+        const modal = document.querySelector('.modal-background')
+        const modal_teatArea = modal.querySelector('textarea')
+        let formEl
+        let textAreaEl
+        let textData
+
+        function fix(e){
+            modal.classList.add('active')
+            modal_teatArea.value = ''
+            modal_teatArea.focus()
+
+            formEl = undefined
+            textAreaEl = undefined
+            textData = ''
+
+            formEl = e.currentTarget.parentNode
+            textAreaEl = formEl.querySelector('textarea')
+        }
+
+        const fixSubmit = document.querySelector('#fix-submit')
+        const fixCancel = document.querySelector('#fix-cancel')
+
+        fixSubmit.addEventListener('click', e => {
+            if(textAreaEl){
+                textAreaEl.value = modal_teatArea.value
+            }
+            modal.classList.remove('active')
+
+            formEl.submit()
+        })
+
+        fixCancel.addEventListener('click', e => {
+            formEl = undefined
+            textAreaEl = undefined
+            textData = ''
+
+            modal.classList.remove('active')
+        })
+
+    </script>
+    <script>
+        $.ajaxSetup({
+            headers: { "X-CSRFToken": '{{csrf_token}}' }
+        });
+    </script>
+    <script src="{%static 'django_app/js/tool/admin_index.js' %}"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+
+      let adminAlert = document.getElementById("adminAlert");
+      var adminMessage = adminAlert? adminAlert.innerHTML : null;
+
+    if(adminMessage){
+      $().ready(function () {
+        Swal.fire({
+          icon: 'success', // Alert 타입
+          title: adminMessage, // Alert 제목
+
+        })
+     })
+    }
+
+    </script>
+
+     <script>
+
+
+     let workViewTable = document.querySelector(".workViewTable");
+
+
+     workViewTable.addEventListener('click', function(e){
+
+        workId = e.target.parentNode.parentNode.children[6].value
+        workType = e.target.parentNode.parentNode.children[7].value
+        workStatus = e.target.parentNode.parentNode.children[8].value
+
+
+
+        console.log(workId,workType, workStatus)
+        if (e.target.dataset.work =="admin_work_view"){
+        //var pop= window.open("",'작업확인',"")
+
+        var admin = document.forms.admin_view
+        admin.action = '/admin/index/adminview'
+        admin.target = "_new"
+        admin.work_id.value = workId
+        admin.work_type.value = workType
+        admin.work_status.value = workStatus
+
+        admin.submit()
+
+
+}
+
+
+
+
+
+
+
+
+
+     })
+
+
+
+
+
+
+    </script>
+
+
+
+</body>
+</html>
+
+
+
+
+

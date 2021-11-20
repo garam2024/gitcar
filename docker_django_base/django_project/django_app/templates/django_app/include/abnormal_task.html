@@ -1,0 +1,97 @@
+<div id="demo">
+    <section id="clipList" style="display:block;">
+        <h2>클립 영역</h2>
+        <div id="clips">
+
+        </div>
+    </section>
+    <section class="editing-area">
+        <div class="editing-area-nav">
+            <h2>편집 영역</h2>
+            <div>
+                <button id="preBtn" data-action="pre" class="btn btn-default btn-block" onclick="ClickPreBtn()"
+                disabled>
+                    <i class="glyphicon glyphicon-chevron-left"></i>
+                    Prev
+                </button>
+                <button id="nextBtn" data-action="next" class="btn btn-default btn-block" onclick="ClickNextBtn()">
+                    Next
+                    <i class="glyphicon glyphicon-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        <div>
+            <div id="canvas-area" class="disable">
+                <!-- This video comes from NASA Video Gallery https://www.youtube.com/watch?v=Zg7i4q_EX9E -->
+                <video id="orgVideo" style="display:block; margin: 0 auto; position: absolute;" src="" type="video/mpeg"></video>           
+                <canvas id="tmpCanvas" style="display: none;"></canvas>
+                <canvas id="canvas" style="display:block; position: absolute; z-index:-1"></canvas>
+                <canvas id="c" style="position: ralative; z-index: 20;"></canvas>
+            </div>
+            <div>
+                <p id="subtitle" class="text-center text-info"> </p>
+                <div class="wavesufer-area">
+                    <div id="wave-timeline"></div>
+                    <div id="waveform">
+                        <!-- Here be the waveform -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="video-tools">
+            <button id="playBtn" data-action="play" class="btn btn-default btn-block">
+                <span id="play">
+                    <i class="glyphicon glyphicon-play"></i>
+                    play
+                </span>
+                <span id="pause" style="display: none">
+                    <i class="glyphicon glyphicon-pause"></i>
+                    pause
+                </span>
+            </button>
+            <button id="downloadBtn" class="btn btn-default btn-block" onclick="downLoadFile()">
+                <i class="glyphicon glyphicon-save"></i>
+                <span> 작업 파일 다운로드</span>
+            </button>
+            <button id="fileLoad" class="btn btn-default btn-block fileLoad" title="load file">
+                <i class="glyphicon glyphicon-open"></i>
+                <span> 작업 파일 업로드</span>
+            </button>
+            <input id="file" type="file" accept="video/mp4,video/mkv, video/x-m4v,video/*" class="hidden">
+            <!-- <button id="exportBtn" class="btn btn-info btn-block" data-action="export" title="Export annotations to JSON" disabled>
+                <i class="glyphicon glyphicon-file"></i>
+                <span>Export</span>
+            </button> -->
+        </div>
+    </section>
+    <div id="labelResult">
+        <div>
+            <h2>탑승자 정보</h2>
+            <div id= "occupantArea"> 
+            </div>
+        </div>
+        <div>
+            <h2>라벨링 영역</h2>
+            <div id="labelingArea">
+                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                </div>
+            </div>
+        </div>
+        <div class="work-complete">
+            <button type="button" class="btn btn-danger btn-block" data-action="delete-region" onclick="ClickRemoveBtn()">
+                <i class="glyphicon glyphicon-trash"></i>
+                삭제
+            </button>
+            <button id="saveBtn" class="btn btn-success btn-block" onclick="DataToString()" disabled>
+                <i class="glyphicon glyphicon-saved"></i>
+                <span> 작업 저장</span>
+            </button>
+        </div>
+    </div>
+</div>
+<!-- js -->
+<script src="{%static 'django_app/car_abnormal/js/trivia.js' %}"></script>
+<script src="{%static 'django_app/car_abnormal/js/imageLabeling.js' %}"></script>
+<script src="{%static 'django_app/car_abnormal/js/occupant.js' %}"></script>
+<script src="{%static 'django_app/car_abnormal/js/main.js' %}"></script>
+<script src="{%static 'django_app/car_abnormal/js/loadWave.js' %}"></script>

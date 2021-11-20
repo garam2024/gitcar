@@ -1,0 +1,24 @@
+{% extends 'django_app/base.html' %}
+{% load static %}
+{% block contents %}
+<link rel="icon" href="{% static 'django_app/img/logo/gjac_favicon.ico' %}">
+<link rel="stylesheet" href="{% static 'django_app/css/color.css' %}">
+<script src="{% static 'django_app/js/tool/button.js' %}"></script>
+
+
+
+<div class="workMain">
+  <div style="padding:31px;">
+    <div>
+      <div class="flex_row">
+        <div><img src="{% static 'django_app/img/menu/arrow.svg' %}"></div>
+        <div class="labellingWork">가이드 라인</div>
+      </div>
+      <div class="imgscroll">
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+<script src="{% static 'django_app/js/tool/button.js' %}"></script>

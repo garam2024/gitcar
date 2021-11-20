@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- annotation -->
+    <!-- <link rel="stylesheet" href="{%static 'django_app/css/login_css/bootstrap.min.css' %}"> -->
+    <link rel="stylesheet" href="{%static 'django_app/css/annotation/ribbon.css' %}">
+    <link rel="stylesheet" href="{%static 'django_app/css/annotation/style.css' %}">
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{%static 'django_app/css/taskprocess2.css' %}">
+
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- Latest compiled JavaScript -->
+  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> -->
+  <!-- fontAwesome -->
+  <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
+
+  <link rel="shortcut icon" href="{%static 'django_app/img/logo/gjac_favicon.ico' %}">
+  <link rel="stylesheet" href="{%static 'django_app/css/commons.css' %}">
+
+  <link rel="stylesheet" href="{%static 'django_app/css/boundingPage.css' %}">
+  <link rel="stylesheet" href="{%static 'django_app/css/taskprocess.css' %}">
+  <link rel="stylesheet" href="{%static 'django_app/css/taskprocess2.css' %}">
+  <!-- bootstrap.css -->
+  <!-- <link href="css/bootstrap.min.css" rel="stylesheet"> -->
+  <link rel="stylesheet" href="{%static 'django_app/css/font-awesome.css' %}">
+
+  <!-- Toastr style -->
+  <link rel="stylesheet" href="{%static 'django_app/css/toastr.min.css' %}">
+  <link rel="stylesheet" href="{%static 'django_app/css/taskprocess2.css' %}">
+
+
+
+
+
+</head>
+
+<body >
+
+
+  <div class="grid_area">
+    <div class="logo">
+      <header class="header">
+        <div><a href="/main"><img class="contain" alt="AI cloud" src="/static/django_app/img/logo/gjac_logo.png"></a>
+        </div>
+      </header>
+    </div>
+    <div class="nav alcen">
+      <div class="flex_row">
+        <h3>행동감정전사</h3><a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"
+          ><i class="fa fa-bars" ></i> </a>
+      </div>
+    </div>
+    <div class="label_logo alcen jucen"><h3>라벨링하기</h3></div>
+    <div class="crop">크롭동영상</div>
+    <div class="main">
+      <div class="main_container">
+
+        <main class="main_container image-labeling-main no-select">
+    
+          <div class="flow-element" style="
+        height: -13px;
+    ">
+            <nav class="image-labeling-toolbox">
+              <div class="labeling-toolbox-left">
+                <!-- 파일 추가 -->
+                <label for="inputImage" class="glyphicon glyphicon-folder-open button-first hidden">
+                  <input type="file" id="inputImage" class="hidden">
+                </label>
+                <!-- 제품 선택 -->
+    
+                <!-- 라벨 선택 -->
+                <ul class="label-select-box">
+                  <li>
+                    <div class="select-value hidden">
+                      <span class="selected"></span>
+                    </div>
+                    <ul class="label-selected">
+    
+                    </ul>
+                  </li>
+                </ul>
+                <!-- 흐릿한 이미지 체크 -->
+                <div class="label-blur-check hidden">
+                  <label>흐릿한 이미지: <input type="checkbox" id="blurCheck"></label>
+                </div>
+                <!-- 컬러 선택 -->
+                <input type="color" value="#E71D36" id="selectColor" class="hidden">
+              </div>
+              <!-- 이미지 이전 & 다음 버튼 -->
+              <div class="image-order hd_color">
+                <div class="page-input">
+                  <input type="text" id="inputPage" placeholder="1">
+                </div>
+                <div class="image-order-left">
+                  <button class="glyphicon glyphicon button-first glyphicon-chevron-left" id="imagePrevButton"></button>
+                  <button class="glyphicon glyphicon button-first glyphicon-chevron-right" id="imageNextButton"></button>
+                </div>
+                <div class="image-order-right">
+                  <span id="nowPage">0</span>
+                  <span> / </span>
+                  <span id="allPageList">0</span>
+                </div>
+              </div>
+            </nav>
+          </div>
+          <div class="row image-labeling-view jucen">
+            <div class="image-labeling-form">
+    
+              <video id="orgVideo" style="display:block; margin: 0 auto;" src="/media/django_app/test_video/my_video.mp4"
+                type="video/mpeg" width="1200px" height="675px" autoplay>
+              </video>
+      
+              <img id="tmpImage" style="display: none;" width="1200px" height="675px">
+              <canvas id="canvas" style="display:block; position: absolute; z-index:-1"></canvas>
+              <canvas id="c" style="position: absolute; z-index: 20;"></canvas>
+              <p id="subtitle" class="text-center text-info">&nbsp;</p>
+        
+
+            </div>
+          </div>
+    
+          <div class="wavesf">웨이브서퍼
+            <div id="wave-timeline"></div>
+
+            <div id="waveform">
+                <!-- Here be the waveform -->
+            </div>
+          </div>
+          <div class="flex ">
+            <ul class="flex hd_color">
+              <li>
+                <i class="fa fa-play"></i>
+              </li>
+              <!-- 일시정지 : fa-pause -->
+              <li><i class="fa fa-reply"></i> </li>
+              <li></li> <i class="fa fa-volumn-up"></i> </li>
+            </ul>
+    
+            <!-- 볼륨다운 : fa-volumn-off -->
+    
+            <!-- 라벨링 기타 -->
+            <div class="row image-labeling-section">
+    
+              <div class="flex">
+    
+                <button type="button" class="btn btn-w-m btn-info" id="intermediateStorage">중간 저장</button>
+                <button type="button" class="btn btn-w-m btn-success" id="jsonDataToServer">작업 완료</button>
+                
+              </div>
+            </div>
+          </div>
+        </main>
+    </div>
+
+
+
+  </div>
+  <div class="labelling">
+    <div>  <aside class="side-container">
+      <div class="add-human">
+        <h4>행동/감정 전사</h4>
+        <button type="button" id="addHuman" class="button">인원 추가하기 + </button>
+      </div>
+
+      <div class="create-human-info">
+        
+  
+      </div>
+  
+  
+    </aside></div>
+  </div>
+  <div class="footer"><div>
+    <div class="col-md-10 col-md-offset-1 col-sm-12" >
+      <ul class="list-icons" >
+        <li >(주)솔트룩스 사업장 소재지: 서울시 강남구 언주로 538(역삼동 689-4)대웅빌딩 3층~5층[06147, (구)135-917]</li>
+        <li ><span >고객센터: 02.2193.1600</span> <span >팩스: 02.3402.0082</span> <span >이메일: marketing@saltlux.com</span> <span >대표이사:이경일</span></li>
+        <li >사업자등록번호: 102-81-13061 </li>
+        <li ><a href="mai2019lto:marketing@saltlux.com" ><i class="fa fa-envelope-o pr-10" ></i>marketing@saltlux.com</a></li>
+        <li >Copyright ©  <a target="_blank" href="http://www.saltlux.com/" >Saltlux</a>. All rights reserved.</li>
+      </ul>
+    </div>
+  
+  </div>
+
+</div>
+
+
+  </div>
+  <div class="fake_body" >
+    <div id="label_btn" class="hidden">
+      <div><ul class="flex_row">
+        <li><select>사람
+        </select></li>
+        <li><h4>행동</h4></li>
+        <li id="icon"><i class="fa fa-angle-double-right fa-3x"></i></li>
+      </ul></div>
+      <div class="label_board">
+      <ul>
+        <li>졸음운전</li>
+        <li>고개숙이다/흔들다</li>
+        <li>박수치다</li>
+        <li>뺨을때리다</li>
+        <li>목을만지다</li>
+        <li>어깨를두드리다</li>
+      </ul>
+      <ul>
+        <li>음주운전</li>
+        <li>불안정한동작</li>
+        <li>핸들을흔들다</li>
+        <li>~를마시다</li>
+        <li>창문을열다</li>
+      </ul>
+      <ul>
+        <li>물건찾기</li>
+        <li>몸을돌리다</li>
+        <li>손을뻗다</li>
+        <li>~허리굽히다</li>
+        <li>줍다</li>
+      </ul>
+      <ul>
+        <li>통화</li>
+        <li>손을뻗다</li>
+        <li>고개를돌리다</li>
+        <li>옆으로기대다</li>
+        <li>~를손에쥐다</li>
+        <li>말하다</li>
+      </ul>
+      <ul>
+        <li>휴대폰조작</li>
+        <li>손을뻗다</li>
+        <li>고개를돌리다</li>
+        <li>~를손에쥐다</li>
+        <li>힐끗거리다</li>
+      </ul>
+      <ul>
+        <li>차량제어</li>
+        <li>손을뻗다</li>
+        <li>고개를돌리다</li>
+        <li>힐끗거리다</li>
+        <li>기기사용</li>
+      </ul>
+      <ul>
+        <li>운전자폭행</li>
+        <li>손을뻗다</li>
+        <li>발을올리다</li>
+        <li>일어서다</li>
+        <li>휘두르다</li>
+        <li>말하다</li>
+        <li>하차하다</li>
+      </ul>
+    </div>
+    </div>
+  </div>
+
+
+ 
+
+  <script>
+        $.ajaxSetup({
+          headers: { "X-CSRFToken": '{{csrf_token}}' }
+      });
+  </script>
+  <script src="{%static 'django_app/js/tool/submit.js' %}"></script>
+
+  <script>
+    let human = []
+
+    let variable = {
+      사람: '',
+      감정: '',
+      행동: '',
+    }
+
+    const addHumanBtn = document.querySelector('#addHuman')
+    addHumanBtn.addEventListener('click', e => {
+      addHuman()
+    })
+
+    function addHuman() {
+      const container = document.querySelector('.side-container > .create-human-info')
+
+      container.innerHTML += `
+              <div class="info-seciton">
+                  <div class="info-container">
+                      <div>
+                          이미지 정보 
+                      </div>
+                      <div class="flex_row">
+                          사람<div class="humannum">1</div>
+                      </div>
+                      <div>
+                          <button onclick='act()'>행동 정보</button>
+                      </div>
+                      <div>
+                          통화, 휴대폰 조작, 차량 제어
+                      </div>
+                      <div>
+                          감정 정보
+                      </div>
+                      <div>
+                          슬픔
+                      </div>
+                  </div>
+                  <div>
+                      <button>
+                          전 작업 불러오기    
+                      </button>
+                  <div>
+              </div>
+              `
+
+              const humannum = document.querySelector(".humannum");
+              let number = humannum.innerText;
+              number = parseInt(number) + 1;
+              humannum.innerText = number;
+    }
+
+  </script>
+  <script>
+
+
+  </script>
+
+  <!-- wavesurfer.js -->
+  <script src="https://unpkg.com/wavesurfer.js/dist/wavesurfer.js"></script>
+
+  <!-- plugins -->
+  <script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.timeline.js"></script>
+  <script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.regions.js"></script>
+  <script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.minimap.js"></script>
+  <script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.cursor.js"></script>
+
+  <script src="{% static 'django_app/js/tool/trivia.js' %}"></script>
+  <script src="{%static 'django_app/js/tool/main.js' %}"></script>
+  <script src="{%static 'django_app/js/tool/rect.js' %}"></script>
+  
+</body>
+
+</html>

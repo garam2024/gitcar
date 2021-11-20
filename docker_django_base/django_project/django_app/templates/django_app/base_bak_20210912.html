@@ -1,0 +1,211 @@
+<!-- 페이지 토대 레이아웃 -->
+
+<!DOCTYPE html>
+{% load static %}
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Main Page</title>
+  <link rel="stylesheet" href="{% static 'django_app/css/color.css' %}">
+  <link rel="stylesheet" href="{% static 'django_app/css/loading.css' %}">
+  <link rel="stylesheet" href="{% static 'django_app/css/index_layout.css' %}">
+  <link rel="icon" href="{% static 'django_app/img/logo/gjac_favicon.ico' %}">
+  <!-- <link href="{% static 'django_app/css/login_css/bootstrap.min.css' %}" rel="stylesheet"> -->
+ 
+
+
+</head>
+
+<body class="body-portal middle">
+  {% include 'django_app/loading.html' %}
+  {% for message in messages %}
+
+  <div id="loginAlert" style="display:none;">{{ message }}</div>
+
+{% endfor %}
+  <div id="main-container">
+    <header id="header">
+      <div><a class="navbar-brand" href="main"><img alt="AI cloud"
+            src="{% static 'django_app/img/logo/gjac_logo.png' %}"></a></div>
+
+    </header>
+    <!-- workTitle -->
+    <div id="workTitle" class="middle">
+      <div class="flex_row titlecolor">
+        <div>DATA LABELLING</div>
+        <div>차량내외부 상황인식 데이터 라벨링</div>
+        <div></div>
+      </div>
+    </div>
+    <div class="main-menu">
+      <div class="main-menu-tool">
+
+
+
+
+        <div>
+          <div class="middle">
+            <div class="workID"> ID | {{profile}}</div>
+          </div>
+
+          <form method="post" action="{% url 'logout_module' %}">
+            <ul>
+              <li><img class="menuImg2" alt="labelling" src="{% static 'django_app/img/menu/padlock (1).svg' %}">
+                <input id="alertLogout" type="submit" value="로그아웃">
+              </li>
+            </ul>
+          </form>
+        </div>
+
+
+
+
+        <div class="menuBg">
+          <ul class="mainPage">
+            <li class="menuChoice" data-menu="labelling"><a class="flex_col focus"><img
+              class="menuImg" alt="labelling" src="{% static 'django_app/img/menu/bounding-box.svg' %}"><input
+              type="submit" value="라벨링 작업"></a>
+              <ul class="dropdown">
+                <li><a href="{% url 'abnormal_task_list' %}" style="font-weight: 400; font-size: 15px;">이상행동</a></li>
+                <li><a href="{% url 'interface_task_list' %}" style="font-weight: 400; font-size: 15px;">인터페이스</a></li>
+              </ul>  
+            </li>
+
+            <li class="menuChoice" data-menu="inspect"><a class="flex_col focus"><img
+                  alt="check" class="menuImg" src="{% static 'django_app/img/menu/checked.svg' %}"><input type="submit"
+                  value="검수 작업"></a>
+                  <ul class="dropdown">
+                    <li><a href="{% url 'inspect_list_1st' %}" style="font-weight: 400; font-size: 16px;">1차 검수</a></li>
+                    <li><a href="{% url 'inspect_list_2nd' %}" style="font-weight: 400; font-size: 16px;">2차 검수</a></li>
+                    <li><a href="{% url 'inspect_list_3rd' %}" style="font-weight: 400; font-size: 16px;">3차 검수</a></li>
+                  </ul>    
+            </li>
+
+            <li class="menuChoice" data-menu="guide"><a href="{% url 'main' %}" class="flex_col focus"><img alt="guide"
+              class="menuImg" src="{% static 'django_app/img/menu/guide.svg' %}"><input type="submit"
+              value="가이드라인"></a>              
+           </li>
+
+            <li class="menuChoice" data-menu="mywork"><a href="{% url 'mytask' %}" class="flex_col focus"><img
+                  class="menuImg" alt="mypage" src="{% static 'django_app/img/menu/goal.svg' %}"><input type="submit"
+                  value="나의 작업"></a></li>
+
+            <li class="menuChoice" data-menu="mywork"><a href="{% url 'mytask_record' %}" class="flex_col focus"><img
+                  class="menuImg" alt="mypage" src="{% static 'django_app/img/menu/file.svg' %}"><input type="submit"
+                  value="작업 내역"></a></li>
+
+          </ul>
+        </div>
+      </div>
+    </div>
+    {% block contents %}
+    {% endblock %}
+
+    <div class="footer">
+      <div class="footer-address">
+        <ul class="list-inline list-bar company-info">
+          <li>(주)광주인공지능센터 사업장 소재지: 광주광역시 동구 동계천로 150, 510호 (동명동, 아이플렉스광주)</li>
+          <li>고객센터: 062.223.1335 팩스: 062.223.1336 이메일: gjaicenter@gmail.com 대표이사: 이경일</li>
+          <li>Copyright (C)㈜광주인공지능센터. All Rights reserved</li>
+        </ul>
+      </div>
+    </div>
+
+    <script src="{% static 'django_app/js/tool/jquery-3.1.1.min.js' %}"></script>
+    <!-- Ajax 사용 시 CSRF Token 추가 기능 -->
+    <script>
+      $.ajaxSetup({
+        headers: { "X-CSRFToken": '{{csrf_token}}' }
+      });
+    </script>
+    <!-- <script src="{% static 'django_app/js/tool/logout.js' %}"></script> -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{% static 'django_app/js/tool/button.js' %}"></script>
+    <script>
+      
+      let loginAlert = document.getElementById("loginAlert");
+      var loginMessage = loginAlert? loginAlert.innerHTML : false;
+      $().ready(function () {
+            if(!loginMessage) return
+            Swal.fire({
+              icon: 'success', // Alert 타입 
+              title: loginMessage, // Alert 제목 
+          
+            });
+          });
+
+
+      
+            function formMessage(e){
+              
+            let form = e.currentTarget.parentNode
+            let classList = e.currentTarget.classList
+            // if(e.currentTarget.classList)
+
+            if(classList.contains('choice_1')){
+              Swal.fire({
+                title: '정말 취소하시겠습니까?',
+                showDenyButton: true,
+                confirmButtonText: '확인',
+                denyButtonText: '취소',
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  form.submit()
+                } else if (result.isDenied) {
+                  return
+                }
+              })
+            }else if(classList.contains('choice') && !classList.contains('loading-middle')){
+              Swal.fire({
+                title: '작업 하시겠습니까?',
+                showDenyButton: true,
+                confirmButtonText: '확인',
+                denyButtonText: '취소',
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  form.submit()
+                } else if (result.isDenied) {
+                  return
+                }
+              })
+            }else if(classList.contains('choice') && classList.contains('loading-middle'))
+
+            Swal.fire({
+                title: '작업 하시겠습니까?',
+                showDenyButton: true,
+                confirmButtonText: '확인',
+                denyButtonText: '취소',
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  const processForm = document.querySelector('#processForm')
+                  processForm.addEventListener('click', e => {
+                      if(e.target.nodeName !== 'BUTTON') return
+                      // if(e.target.classList.indexOf('choice') !== -1){
+                        const processLoading = document.querySelector('.process-loading')
+                        processLoading.classList.add('active')
+                      // }
+                  })
+
+                  form.submit()
+                } else if (result.isDenied) {
+                  return
+                }
+              })
+          }
+
+          $('[data-menu="inspect"]').on('click', function(){
+            $('[data-menu="inspect"] .dropdown').slideToggle('fast')
+          })
+
+          $('[data-menu="labelling"]').on('click', function(){
+            $('[data-menu="labelling"] .dropdown').slideToggle('fast')
+          })
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,34 @@
+{% load static %}
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<main class="board-container write">
+     <form method="post" name="writeForm">
+     {% csrf_token %}
+      <div class="form-group">
+        <input type="text" class="form-control" name="title"  id="title" placeholder="제목을 입력하세요.">
+      </div>
+      <div class="form-group">
+        <div id="editor">
+
+        </div>
+        <input type="hidden" name="editor" value="">
+      </div>
+     <div class="option">
+         <div>
+             <select name="option" class="form-control">
+                 <option value="normal" selected>비공지</option>
+                 <option value="notice">공지</option>
+             </select>
+         </div>
+         <div>
+             <button type="submit" class="btn btn-primary btn-sm">등록</button>
+             {% if main == 'main' %}
+                <a href="{% url 'admin_board_list' %}" class="btn btn-primary btn-sm">취소</a>
+             {% else %}
+                <a href="{% url 'admin_board_list' %}" class="btn btn-primary btn-sm">취소</a>
+             {% endif %}
+         </div>
+     </div>
+    </form>
+</main>
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script src="{% static 'django_app/car_interface/js/quillEditor.js' %}"></script>

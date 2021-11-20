@@ -1,0 +1,132 @@
+<!--
+    2021 10 20 상민 수정
+-->
+
+{% load static %}
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Expires" content="Mon, 06 Jan 1990 00:00:01 GMT">
+<title>인터페이스</title>
+<!-- favicon -->
+<link rel="shortcut icon" href="{%static 'django_app/img/logo/gjac_favicon.ico' %}">
+
+<!-- Bootstrap -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"> <!-- CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<!-- 테마 -->
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet"> <!-- 자바스크립트 -->
+
+<!-- stylesheet -->
+<link rel="stylesheet" href="{%static 'django_app/car_interface/css/style.css' %}?ver={% now "M-H-i"%}" />
+<link rel="stylesheet" href="{%static 'django_app/car_interface/css/ribbon.css' %}?ver={% now "M-H-i"%}" />
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+
+<!-- wavesurfer -->
+<script src="https://unpkg.com/wavesurfer.js/dist/wavesurfer.js?ver={% now "M-H-i"%}"></script>
+<script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.timeline.js?ver={% now "M-H-i"%}"></script> <!-- timeline plugin -->
+<script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.regions.js?ver={% now "M-H-i"%}"></script> <!-- regions plugin -->
+<script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.minimap.js?ver={% now "M-H-i"%}"></script> <!-- minimap plugin -->
+<script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.cursor.js?ver={% now "M-H-i"%}"></script> <!-- cursor plugin -->
+<script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.markers.js?ver={% now "M-H-i"%}"></script> <!-- markers plugin -->
+<script src="{%static 'django_app/car_interface/lib/fabric.js' %}?ver={% now "M-H-i"%}"></script> <!-- fabric -->
+<link rel="screenshot" itemprop="screenshot"
+    href="https://katspaugh.github.io/wavesurfer.js/example/screenshot.png" /> <!-- example img -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js?ver={% now "M-H-i"%}"></script>
+
+<script src="{%static 'django_app/car_interface/lib/tf-core.js' %}?ver={% now "M-H-i"%}"></script>
+<script src="{%static 'django_app/car_interface/lib/tf-converter.js' %}?ver={% now "M-H-i"%}"></script>
+<script src="{%static 'django_app/car_interface/lib/tf-backend-webgl.js' %}?ver={% now "M-H-i"%}"></script>
+<script src="{%static 'django_app/car_interface/lib/handpose.js' %}?ver={% now "M-H-i"%}"></script>
+
+<!-- xml2json -->
+<script type="text/javascript" src="{%static 'django_app/car_interface/lib/xml2json.js' %}?ver={% now "M-H-i"%}"></script>
+
+<!-- zip file download -->
+<script async type="text/javascript" src="{%static 'django_app/car_interface/lib/jszip.min.js' %}?ver={% now "M-H-i"%}" charset="utf-8"></script>
+<script async type="text/javascript" src="{%static 'django_app/car_interface/lib/FileSaver.min.js' %}?ver={% now "M-H-i"%}"
+    charset="utf-8"></script>
+<script async type="text/javascript" charset="utf-8"></script>
+<!-- google analytics -->
+<script src="{%static 'django_app/car_interface/lib/master.js' %}?ver={% now "M-H-i"%}"></script>
+</head>
+<body itemscope itemtype="http://schema.org/WebApplication">
+<div class="modal_ground hide" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0,0,0, 0.5); 1px solid #e5e5e5; z-index: 1000;">
+
+</div>
+<div class="modal-change-image">
+    <div class="image-container">
+        <header>
+            <h3>블러 이미지 변경</h3>
+            <p>이미지 선택하면 해당하는 시간의 이미지로 바뀝니다.</p>
+            <button type="button" id="changeImgModalClose">
+                <i class="glyphicon glyphicon-remove">
+                </i>
+            </button>
+        </header>
+        <div class="change-image-list">
+
+        </div>
+    </div>
+    <footer>
+
+    </footer>
+</div>
+
+<div class="modal-content" style="display:none;">
+    <div class="layerloader">
+        <div class="loader"></div>
+    </div>
+</div>
+
+<div class="modal-final-complete">
+   <div class="center">
+       <div>
+           최종 제출 하시겠습니까?
+       </div>
+       <div>
+           <button type="button" class="btn check" id="final_sure">확인</button>
+           <button type="button" class="btn cancel" id="final_cancel">취소</button>
+       </div>
+   </div>
+</div>
+
+<div class="modal-inspect-complete">
+   <div class="center">
+       <div>
+           검수 완료 하시겠습니까?
+       </div>
+       <div>
+           <button type="button" class="btn check" id="inspect_complete_sure">확인</button>
+           <button type="button" class="btn cancel" id="inspect_complete_cancel">취소</button>
+       </div>
+   </div>
+</div>
+
+
+<div class="black-screen hide">
+    <div class="loader"></div>
+</div>
+
+<div class="modal-inspect-check">
+   <div class="center">
+       <div>
+           관리자 반려 완료를 하시겠습니까?
+       </div>
+       <div>
+           <button type="button" class="btn check" id="inspect_sure">확인</button>
+           <button type="button" class="btn cancel" id="inspect_cancel">취소</button>
+       </div>
+   </div>
+</div>
+
+<header class="header">
+    <div class="header-left">
+
+    </div>
+</header>
+<input type="hidden" id="bookmark" value="{{task_info.bookmark}}">

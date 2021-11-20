@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="shortcut icon" href="{%static 'django_app/img/logo/gjac_favicon.ico' %}">
+    <link rel="stylesheet" href="{%static 'django_app/css/commons.css' %}">
+    
+    <link rel="stylesheet" href="{%static 'django_app/css/boundingPage.css' %}">
+</head>
+<body>
+    <!-- 헤더 & 툴 박스 -->
+    <header class="header">
+        <h1 class="logo"><a href="index.html"><img alt="AI cloud"
+          src="{% static 'django_app/img/logo/gjac_logo.png' %}"></a></h1>
+    </header>
+    <title>Bounding Page</title>
+    <div class="header-space"></div>
+    <nav class="labeling-page-nav">
+        <aside class="inner">
+            <h3>작업 완료 확인</h3>
+            <div>
+                
+            </div>
+        </aside>
+        <div class="toggle-button">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </nav>
+    <!-- 라벨링 작업 -->
+    <main class="container image-labeling-main no-select">
+        <div class="flow-element">
+            <nav class="image-labeling-toolbox">
+                <div class="labeling-toolbox-left">
+                    <!-- 파일 추가 -->
+                    <label for="inputImage" class="glyphicon glyphicon-folder-open button-first hidden">
+                        <input type="file" id="inputImage" class="hidden">
+                    </label>
+                    <!-- 제품 선택 -->
+                    <ul class="label-product-box">
+                        <li>
+                            <div class="product-value">
+                                <span class="selected">바나나 우유</span>
+                                <span class="down glyphicon glyphicon-chevron-down"></span>
+                                <span class="up glyphicon glyphicon-chevron-up"></span>
+                            </div>
+                            <ul class="product-selected">
+                                
+                            </ul>
+                        </li>
+                    </ul>
+                    <!-- 라벨 선택 -->
+                    <ul class="label-select-box">
+                        <li>
+                            <div class="select-value">
+                                <span class="selected"></span>
+                                <span class="down glyphicon glyphicon-chevron-down"></span>
+                                <span class="up glyphicon glyphicon-chevron-up"></span>
+                            </div>
+                            <ul class="label-selected">
+                                
+                            </ul>
+                        </li>
+                    </ul>
+                    <!-- 흐릿한 이미지 체크 -->
+                    <div class="label-blur-check">
+                        <label>흐릿한 이미지: <input type="checkbox" id="blurCheck"></label>
+                    </div>
+                    <!-- 컬러 선택 -->
+                    <input type="color" value="#E71D36" id="selectColor">
+                </div>
+                <!-- 이미지 이전 & 다음 버튼 -->
+                <div class="image-order">
+                    <div class="page-input">
+                        <input type="text" id="inputPage" placeholder="1">
+                    </div>
+                    <div class="image-order-left">
+                        <button class="glyphicon glyphicon button-first glyphicon-chevron-left" id="imagePrevButton"></button>
+                        <button class="glyphicon glyphicon button-first glyphicon-chevron-right" id="imageNextButton"></button>
+                    </div>
+                    <div class="image-order-right">
+                        <span id="nowPage">0</span>
+                        <span> / </span>
+                        <span id="allPageList">0</span>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div class="row image-labeling-view">
+            <div class="image-labeling-form">
+            </div>
+        </div>
+        <!-- 라벨링 기타 -->
+        <div class="row image-labeling-section">
+            <a id="imageToClient" class="button-first">이미지 내보내기</a>
+        </div>
+    </main>
+    <div id="imageData" class="hidden">
+        <img src="media/django_app/images/sunchip/1.jpg" alt="">
+        <img src="media/django_app/images/sunchip/2.jpg" alt="">
+        <img src="media/django_app/images/sunchip/3.jpg" alt="">
+        <img src="media/django_app/images/sunchip/4.jpg" alt="">
+        <img src="media/django_app/images/sunchip/5.jpg" alt="">
+        <img src="media/django_app/images/sunchip/6.jpg" alt="">
+        <img src="media/django_app/images/sunchip/7.jpg" alt="">
+        <img src="media/django_app/images/sunchip/8.jpg" alt="">
+        <img src="media/django_app/images/sunchip/9.jpg" alt="">
+        <img src="media/django_app/images/sunchip/10.jpg" alt="">
+        <img src="media/django_app/images/sunchip/1.jpg" alt="">
+        <img src="media/django_app/images/sunchip/2.jpg" alt="">
+        <img src="media/django_app/images/sunchip/3.jpg" alt="">
+        <img src="media/django_app/images/sunchip/4.jpg" alt="">
+        <img src="media/django_app/images/sunchip/5.jpg" alt="">
+        <img src="media/django_app/images/sunchip/6.jpg" alt="">
+        <img src="media/django_app/images/sunchip/7.jpg" alt="">
+        <img src="media/django_app/images/sunchip/8.jpg" alt="">
+        <img src="media/django_app/images/sunchip/9.jpg" alt="">
+        <img src="media/django_app/images/sunchip/10.jpg" alt="">
+        <img src="media/django_app/images/sunchip/1.jpg" alt="">
+        <img src="media/django_app/images/sunchip/2.jpg" alt="">
+        <img src="media/django_app/images/sunchip/3.jpg" alt="">
+        <img src="media/django_app/images/sunchip/4.jpg" alt="">
+        <img src="media/django_app/images/sunchip/5.jpg" alt="">
+        <img src="media/django_app/images/sunchip/6.jpg" alt="">
+        <img src="media/django_app/images/sunchip/7.jpg" alt="">
+        <img src="media/django_app/images/sunchip/8.jpg" alt="">
+        <img src="media/django_app/images/sunchip/9.jpg" alt="">
+        <img src="media/django_app/images/sunchip/10.jpg" alt="">
+        <img src="media/django_app/images/sunchip/1.jpg" alt="">
+        <img src="media/django_app/images/sunchip/2.jpg" alt="">
+        <img src="media/django_app/images/sunchip/3.jpg" alt="">
+        <img src="media/django_app/images/sunchip/4.jpg" alt="">
+        <img src="media/django_app/images/sunchip/5.jpg" alt="">
+        <img src="media/django_app/images/sunchip/6.jpg" alt="">
+        <img src="media/django_app/images/sunchip/7.jpg" alt="">
+        <img src="media/django_app/images/sunchip/8.jpg" alt="">
+        <img src="media/django_app/images/sunchip/9.jpg" alt="">
+        <img src="media/django_app/images/sunchip/10.jpg" alt="">
+        <img src="media/django_app/images/sunchip/1.jpg" alt="">
+        <img src="media/django_app/images/sunchip/2.jpg" alt="">
+        <img src="media/django_app/images/sunchip/3.jpg" alt="">
+        <img src="media/django_app/images/sunchip/4.jpg" alt="">
+        <img src="media/django_app/images/sunchip/5.jpg" alt="">
+        <img src="media/django_app/images/sunchip/6.jpg" alt="">
+        <img src="media/django_app/images/sunchip/7.jpg" alt="">
+        <img src="media/django_app/images/sunchip/8.jpg" alt="">
+        <img src="media/django_app/images/sunchip/9.jpg" alt="">
+        <img src="media/django_app/images/sunchip/10.jpg" alt="">
+        <img src="media/django_app/images/sunchip/1.jpg" alt="">
+        <img src="media/django_app/images/sunchip/2.jpg" alt="">
+        <img src="media/django_app/images/sunchip/3.jpg" alt="">
+        <img src="media/django_app/images/sunchip/4.jpg" alt="">
+        <img src="media/django_app/images/sunchip/5.jpg" alt="">
+        <img src="media/django_app/images/sunchip/6.jpg" alt="">
+        <img src="media/django_app/images/sunchip/7.jpg" alt="">
+        <img src="media/django_app/images/sunchip/8.jpg" alt="">
+        <img src="media/django_app/images/sunchip/9.jpg" alt="">
+        <img src="media/django_app/images/sunchip/10.jpg" alt="">
+        <img src="media/django_app/images/sunchip/1.jpg" alt="">
+        <img src="media/django_app/images/sunchip/2.jpg" alt="">
+        <img src="media/django_app/images/sunchip/3.jpg" alt="">
+        <img src="media/django_app/images/sunchip/4.jpg" alt="">
+        <img src="media/django_app/images/sunchip/5.jpg" alt="">
+        <img src="media/django_app/images/sunchip/6.jpg" alt="">
+        <img src="media/django_app/images/sunchip/7.jpg" alt="">
+        <img src="media/django_app/images/sunchip/8.jpg" alt="">
+        <img src="media/django_app/images/sunchip/9.jpg" alt="">
+        <img src="media/django_app/images/sunchip/10.jpg" alt="">
+        <img src="media/django_app/images/sunchip/1.jpg" alt="">
+        <img src="media/django_app/images/sunchip/2.jpg" alt="">
+        <img src="media/django_app/images/sunchip/3.jpg" alt="">
+        <img src="media/django_app/images/sunchip/4.jpg" alt="">
+        <img src="media/django_app/images/sunchip/5.jpg" alt="">
+        <img src="media/django_app/images/sunchip/6.jpg" alt="">
+        <img src="media/django_app/images/sunchip/7.jpg" alt="">
+        <img src="media/django_app/images/sunchip/8.jpg" alt="">
+        <img src="media/django_app/images/sunchip/9.jpg" alt="">
+        <img src="media/django_app/images/sunchip/10.jpg" alt="">
+        <img src="media/django_app/images/sunchip/1.jpg" alt="">
+        <img src="media/django_app/images/sunchip/2.jpg" alt="">
+        <img src="media/django_app/images/sunchip/3.jpg" alt="">
+        <img src="media/django_app/images/sunchip/4.jpg" alt="">
+        <img src="media/django_app/images/sunchip/5.jpg" alt="">
+        <img src="media/django_app/images/sunchip/6.jpg" alt="">
+        <img src="media/django_app/images/sunchip/7.jpg" alt="">
+        <img src="media/django_app/images/sunchip/8.jpg" alt="">
+        <img src="media/django_app/images/sunchip/9.jpg" alt="">
+        <img src="media/django_app/images/sunchip/10.jpg" alt="">
+        <img src="media/django_app/images/sunchip/1.jpg" alt="">
+        <img src="media/django_app/images/sunchip/2.jpg" alt="">
+        <img src="media/django_app/images/sunchip/3.jpg" alt="">
+        <img src="media/django_app/images/sunchip/4.jpg" alt="">
+        <img src="media/django_app/images/sunchip/5.jpg" alt="">
+        <img src="media/django_app/images/sunchip/6.jpg" alt="">
+        <img src="media/django_app/images/sunchip/7.jpg" alt="">
+        <img src="media/django_app/images/sunchip/8.jpg" alt="">
+        <img src="media/django_app/images/sunchip/9.jpg" alt="">
+        <img src="media/django_app/images/sunchip/10.jpg" alt="">
+        <img src="media/django_app/images/sunchip/1.jpg" alt="">
+        <img src="media/django_app/images/sunchip/2.jpg" alt="">
+        <img src="media/django_app/images/sunchip/3.jpg" alt="">
+        <img src="media/django_app/images/sunchip/4.jpg" alt="">
+        <img src="media/django_app/images/sunchip/5.jpg" alt="">
+        <img src="media/django_app/images/sunchip/6.jpg" alt="">
+        <img src="media/django_app/images/sunchip/7.jpg" alt="">
+        <img src="media/django_app/images/sunchip/8.jpg" alt="">
+        <img src="media/django_app/images/sunchip/9.jpg" alt="">
+        <img src="media/django_app/images/sunchip/10.jpg" alt="">
+    </div>
+
+    <!-- 푸터 -->
+    <footer class="container-fluid footer">
+        <div class="container">
+            <p>광주인공지능센터</p>
+            <p>주소: 광주 동구 동계천로 150 / 문화전당역4번 출구에서 683m</p>
+            <p><span class="glyphicon glyphicon-earphone"></span> 062-223-1335</p>
+        </div>
+    </footer>
+    <!-- fabric -->
+
+   
+    <script src=" {% static 'django_app/js/tool/fabric.min.js'%}"></script>
+   
+    <script src="{% static 'django_app/js/tool/bounding_util.js'%}"></script>
+    <script src=" {% static 'django_app/js/tool/labeling.js'%}"></script>
+</body>
+</html>

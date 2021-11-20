@@ -1,0 +1,13 @@
+Django
+gunicorn
+requests
+pydub
+natsort
+opencv-python
+psycopg2-binary
+pycryptodome
+pillow
+djangorestframework
+bson
+openpyxl
+mediapipe

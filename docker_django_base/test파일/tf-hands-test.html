@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .video-container{
+            position: relative;
+        }
+
+        #canvas{
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+    </style>
+</head>
+<body>
+    <input type="file" id="file">
+    <div class="video-container">
+        <video src='' id="video">
+
+        </video>
+        <canvas id="canvas">
+
+        </canvas>
+    </div>
+    <button id="drawingBtn">
+        실시간 그리기
+    </button>
+    <script src="./lib/tf-core.js"></script>
+    <script src="./lib/tf-converter.js"></script>
+    <script src="./lib/tf-backend-webgl.js"></script>
+    <script src="./lib/handpose.js"></script>
+    <script>
+        var DrawingHands = (function(){
+        /**
+         * @param {HTMLMediaElement} videoElement html element
+         * 
+         */
+        function DrawingHands(videoElement){
+            this.videoElement = videoElement
+            this.model
+            this.predictions
+        }
+
+        DrawingHands.prototype.load = async function(){
+            this.model = await handpose.load()
+            // console.log(tf.getBackend());
+            // tf.setBackend('webgl');
+            // const a = tf.tensor([[1, 2], [3, 4]]);
+            // a.dispose();
+            //https://www.tensorflow.org/js/guide/platform_environment
+        }
+
+
+        DrawingHands.prototype.ready = async function(){
+            this.predictions = await this.model.estimateHands(this.videoElement)
+            return console.log('hands ready!')
+        }
+
+        DrawingHands.prototype.drawPoint = function(){
+            this.ready()
+            var predictions = this.predictions
+            if (predictions && predictions.length > 0) {
+                var keypoints = predictions[0].landmarks
+                var point = keypoints.filter(array => array.pop())
+
+                return point
+            }else{
+                return 0
+            }
+        }
+
+        return DrawingHands
+    })()
+
+    var canvas = document.querySelector('#canvas')
+    var ctx = canvas.getContext('2d')
+    var drawingBtn = document.querySelector('#drawingBtn')
+
+    drawingBtn.addEventListener('click', function(){
+        video.play()
+        drawCanvas()
+    })
+
+    function drawCanvas(){
+        requestAnimationFrame(drawCanvas)
+        ctx.clearRect(0, 0, canvas.width, canvas.height); 
+        tf_hands.ready()
+        var point = tf_hands.drawPoint()
+
+        if(point.length != 0){
+            for(var i = 0; i < point.length; i++){
+                ctx.fillStyle = 'red'; 
+                ctx.fillRect(point[i][0], point[i][1], 5, 5)
+            }
+        } 
+
+        console.log(point)
+    }
+
+    var input_file = document.querySelector('#file')
+    var tf_hands
+    input_file.addEventListener('change', async function(e){
+        var video = document.querySelector('#video')    
+        
+        video.src = await URL.createObjectURL(e.target.files[0])
+        tf_hands = new DrawingHands(video)
+        await tf_hands.load()
+        canvas.width = video.videoWidth
+        canvas.height = video.videoHeight
+    })
+
+    </script>
+</body>
+</html>

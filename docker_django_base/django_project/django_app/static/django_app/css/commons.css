@@ -1,0 +1,203 @@
+@charset "utf-8";
+
+/*
+            E71D36 <- 빨강 계열
+            dddfe6
+            f4f5f9
+            252c41
+
+            f0f5f9
+            c9d6de
+            52616a
+            1e2022
+        */
+
+* {
+  /* margin: 0; */
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.hidden{
+  display: none;
+}
+
+.no-select {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
+
+h1 a,
+h1 img {
+  display: block;
+}
+
+a{
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    align-content: center;
+}
+
+ul,
+ol,
+li {
+  list-style: none;
+}
+
+body {
+  color: #252c41;
+  word-break: break-all;
+  font-size: 14px;
+}
+
+button {
+  appearance: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.button-first {
+  /* padding: 4px; */
+  transition: 0.3s ease-in-out;
+}
+
+.button-first:active {
+  box-shadow: 0 0 100px 1px rgba(0, 0, 0, 0.1) inset;
+}
+
+.hidden {
+    display: none;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    /* position: fixed; */
+    /* width: 100%; */
+    /* height: 33px; */
+    padding: 0 48px;
+    background-color: white;
+    z-index: 100;
+    /* margin-top: 12px; */
+    height: 56px;
+    border-bottom: 1px solid #e8e8e8;
+    margin-bottom: 13px;
+}
+
+
+.header{
+    display: flex;
+    display: -ms-flexbox;
+    justify-content: space-between;
+}
+
+.header li,
+.header ul,
+.header a,
+.header button,
+.header input{
+    margin: 0;
+}
+
+.header .side-nav > ul,
+.header .top-menu > ul,
+.header .side-nav,
+.header .top-menu{
+    height: 100%;
+}
+
+.header .top-menu > ul,
+.header .side-nav > ul{
+    display: flex;
+    display: -ms-flexbox;
+    justify-content: align-items;
+}
+
+.header .button{
+    text-align: center;
+}
+
+.header .side-nav > ul li{
+    min-width: 120px;
+    height: 100%;
+}
+
+.header .top-menu > ul > li > form,
+.header .top-menu > ul > li input,
+.header .side-nav > ul > li a,
+.header .side-nav > ul > li button{
+    height: 100%;
+}
+
+.user-name button:hover,
+#alertLogout:hover,
+.header .top-menu > ul > li > form:hover,
+.header .top-menu > ul > li input:hover,
+.header .side-nav > ul > li a:hover,
+.header .side-nav > ul > li button:hover{
+    color: initial;
+    background: #e8e8e8;
+}
+
+.header .top-menu > ul > li input{
+    padding: 0 8px;
+}
+
+.user-name,
+.header .side-nav > ul > li a{
+    display: flex;
+    display: -ms-flexbox;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+}
+
+.user-name button{
+    height: 100%;
+    padding: 0 8px;
+}
+
+.footer{
+    display: flex;
+    align-items: center;
+    /* position: fixed; */
+    /* width: 100%; */
+    /* height: 33px; */
+    padding: 32px 48px;
+    background-color: #eee;
+    border-top: 1px solid #e8e8e8;
+}
+
+.footer p {
+    margin-bottom: 4px;
+}
+
+.footer p span {
+    margin-right: 4px;
+}
+
+.footer p:last-child {
+    margin-bottom: 0;
+}
+
+#alertLogout{
+    background: white;
+}
+
+
+

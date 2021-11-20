@@ -1,0 +1,273 @@
+@import url(https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css);
+
+.flex_row{
+  display:flex;
+  flex-direction:row;
+}
+
+.flex_col {
+  display:flex;
+  flex-direction: column;
+}
+
+
+body {
+  font-family: 'NanumSquare',sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.46666667;
+  background-color: #fff;
+}
+
+/* 전체레이아웃 */
+.grid_area{
+  display:grid;
+  grid-template-areas: 
+          "logo nav label_logo"
+          "crop main labelling"
+          "footer footer footer";
+  grid-template-rows: 51px 673px 70px;
+  grid-template-columns: 1fr 1000px 1fr;
+  margin:0 auto;
+  
+
+}
+@media (min-width:1537px) {
+  .grid_area {
+    width:1600px;
+  }
+  
+}
+
+
+
+
+.logo {
+  grid-area:logo;
+}
+
+.nav {
+  grid-area:nav;
+}
+
+.label_logo {
+  grid-area:label_logo;
+}
+
+.crop {
+  grid-area:crop;
+}
+
+.main {
+  grid-area:main;
+  border:1px solid black;
+  margin:0;
+  padding:0;
+}
+
+.main_container{
+  margin:inherit;
+  padding:inherit;
+}
+@media (max-width:1536px) {
+  .main_container {
+    width:100%;
+  }
+}
+
+
+
+.image-labeling-form video {
+  right:0;
+}
+
+
+
+
+.footer {
+  grid-area:footer;
+  width:100%;
+  color: #7d7d7d;
+}
+@media (max-width:1536px) {
+  .footer {
+    position:absolute;
+    top:100vh;
+  }
+}
+
+.col-md-offset-1 {
+  margin-left: 8.33333333%;
+}
+.list, .list-icons {
+  list-style: none;
+  padding: 0;
+}
+ul, ol {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+.list li, .list-icons li {
+  font-size: 12px;
+}
+
+/* 세부 레이아웃 */
+
+.container {
+  object-fit:contain;
+}
+
+
+/* 라벨링 테이블 */
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+
+.field{
+  position: relative;
+  margin: 100px auto;
+  border: 1px solid slategrey;
+  box-sizing: border-box;
+}
+
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  font-size: 14px;
+}
+
+button{
+  padding: 8px 4px;
+  background-color: white;
+  cursor: pointer;
+  /* border: none; */
+  border: 1px solid lightgray;
+  border-radius: 4px;
+  transition: 0.3s ease-in-out;
+}
+
+button:hover{
+  background-color: rgb(250, 250, 250);
+}
+
+.side-container{
+  width: 100%;
+  height: 100vh;
+  padding: 8px;
+  overflow: auto;
+}
+
+.side-container h4{
+}
+
+.info-container{
+  display: grid;
+  grid-template-columns: 6fr 6fr;
+  margin-bottom: 8px;
+  border-left: 1px solid lightgray;
+  border-top: 1px solid lightgray;
+  border-right: 1px solid lightgray;
+}
+
+.info-container > div{
+  padding: 4px;
+  border-bottom: 1px solid lightgray;
+}
+
+.info-container > div:nth-child(odd){
+  border-right: 1px solid lightgray;
+}
+
+.add-human{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.button{
+  padding: 8px 4px;
+  border: none;
+  border-radius: 4px;
+  background-color: cornflowerblue;
+  color: white;
+  transition: 0.3s ease-in-out;
+}
+
+.button:hover{
+  background-color: rgb(167, 198, 255);
+}
+
+.button:active{
+  box-shadow: 0 0 4px rgba(255, 255, 255, 1) inset;
+}
+
+.info-seciton{
+  margin-bottom: 16px;
+}
+
+.row {
+  margin:0;
+}
+
+.alcen {
+  display:flex;
+  align-items: center;
+}
+
+.jucen {
+  display:flex;
+  justify-content: center;
+}
+.fake_body{
+  display: grid;
+  position: absolute;
+  top: 0;
+  width:100%;
+  height:100%;
+}
+
+
+
+.label_board {
+  display:grid;
+  grid-template-areas: 
+  "a b"
+  "c d"
+  "e f"
+  "g h";
+  text-align:center;
+}
+
+/* z-index */
+/* 행동버튼들 */
+#label_btn{
+  border:1px solid lightgray;
+  background-color:rgba(255, 255, 255, 0.9);
+  z-index:9;
+  display:flex;
+  flex-direction :column;
+  position:absolute;
+  top:106px;
+  right:0;
+  width:22.3vw;
+  margin-right:0.5vw;
+}
+/* 인원추가 */
+.labelling {
+  grid-area:labelling;
+  z-index: 8;
+}
+/* 액션아이콘 */
+.fa-angle-double-right{
+  z-index:10;
+}

@@ -1,0 +1,62 @@
+{% load static %}
+<main class="board-container board-list-page">
+    <div class="category-title">
+        <h3 class="title">공지 사항</h3>
+        <select class="form-select form-select-mb3" id="showListLength" aria-label=".form-select-sm example">
+            <option selected>게시글 개수</option>
+            <option value="10">10 개</option>
+            <option value="20">20 개</option>
+            <option value="30">30 개</option>
+        </select>
+    </div>
+    <div class="backgruond clear">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">번호</th>
+              <th scope="col">제목</th>
+              <th scope="col">작성자</th>
+              <th scope="col">날짜</th>
+              <th scope="col">공지</th>
+              {% if user.is_superuser == True %}
+              <th scope="col"></th>
+              {% endif%}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+            </tr>
+            <tr>
+              <th scope="row">2</th>
+              <td>Jacob</td>
+              <td>Thornton</td>
+              <td>@fat</td>
+            </tr>
+            <tr>
+              <th scope="row">3</th>
+              <td>Larry</td>
+              <td>the Bird</td>
+              <td>@twitter</td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+    {% if user.is_superuser == True %} <!-- 관리자 일 때 -->
+    <div class="function right">
+        {% if url == 'mypage' %}
+        <a href="{% url 'mypage_borad_write' %}" class="btn btn-primary btn-sm">글쓰기</a>
+        {% else %}
+        <a href="{% url 'admin_borad_write' %}" class="btn btn-primary btn-sm">글쓰기</a>
+        {% endif %}
+    </div>
+    {% endif %}
+    <nav aria-label="Page navigation">
+      <ul class="pageTable start">
+
+      </ul>
+    </nav>
+</main>

@@ -1,0 +1,56 @@
+.process-loading{
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    font-size: 14px;
+    background-color: white;
+    z-index: 1000;
+}
+
+.process-loading.active{
+    display: flex;
+}
+
+.process-bounce-section{
+    display: flex;
+    justify-content: center;
+}
+
+.process-loading-bounce{
+    width: 30px;
+    height: 30px;
+    margin: 16px 4px 0;
+    border-radius: 50%;
+    perspective: 1000px;
+    animation: 3s bounce infinite ease-in-out both;
+}
+
+.process-loading-bounce:nth-child(1){
+    background: rgba(33,150,243,1);
+    animation-delay: -0.30s;
+}
+
+.process-loading-bounce:nth-child(2){
+    background: rgba(33,150,243,1);
+    animation-delay: -0.15s;
+}
+
+@keyframes bounce {
+    0%, 50%, 100%{
+        transform: scale(0);
+    }
+    25%{
+        background: rgba(5, 192, 59, 1);
+        transform: scale(1);
+    }
+    75%{
+        background: rgba(33,150,243,1);
+        transform: scale(1);
+    }
+}
